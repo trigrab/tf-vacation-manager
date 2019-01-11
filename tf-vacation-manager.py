@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime
 
 from dateutil import tz
@@ -7,8 +8,12 @@ from pyDatePicker import Datepicker
 import sys
 import tkinter.ttk as ttk
 
+logger = logging.getLogger("default")
+logger.setLevel(logging.INFO)
+
 username = "ntw"
-timezone = "Europe/Berlin"
+file_path = "./"
+file_name = ".vacation.txt"
 
 
 class TFVacationManager:
@@ -25,13 +30,14 @@ class TFVacationManager:
         self.start_date = StringVar()
         self.start_date.set(self.get_localtime())
         self.end_date = StringVar()
+        self.status = None
 
         self.build_window_structure()
 
         self.root.mainloop()
 
     @staticmethod
-    def get_localtime(self):
+    def get_localtime():
         return datetime.now(tz.tzlocal()).date().strftime("%d.%m.%Y")
 
     @staticmethod
@@ -41,15 +47,22 @@ class TFVacationManager:
         template_file = "vacation_template.txt"
         return template_env.get_template(template_file)
 
-    def get_vacation_file(self):
+    def write_vacation_file(self):
         vacation_file_content = self.template.render(start_date=self.start_date.get(),
                                                      end_date=self.end_date.get(),
                                                      username=self.username.get())
-        print(vacation_file_content)
+        logger.info("VacationFile stored in: %s \n Content:\n%s\n" % (file_path,
+                                                                      vacation_file_content))
+
+        self.status.config(text="text file written")
+        path = file_path + '/' + file_name
+        with open(path, "w") as file:
+            file.write(vacation_file_content)
 
     def set_window(self):
         self.root = Tk()
         self.root.geometry("500x600")
+        self.root.title = "VacationManager"
 
     def build_window_structure(self):
         main = Frame(self.root, pady=15, padx=15)
@@ -66,9 +79,12 @@ class TFVacationManager:
 
         Datepicker(main, datevar=self.end_date).pack(anchor="w")
 
-        ttk.Button(main, text="set", width=10, command=self.get_vacation_file).pack(anchor="w",
-                                                                                    pady=(15, 0))
+        ttk.Button(main, text="set", width=10, command=self.write_vacation_file).pack(anchor="w",
+                                                                                      pady=(15, 0))
 
+        self.status = Label(main, justify="left", textvariable=self.status)
+
+        self.status.pack(anchor="w", pady=(15, 0))
         if 'win' not in sys.platform:
             style = ttk.Style()
             style.theme_use('clam')
