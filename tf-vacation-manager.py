@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from dateutil import tz
-from jinja2 import Template, FileSystemLoader, Environment
+from jinja2 import FileSystemLoader, Environment
 from tkinter import Tk, Frame, Label, StringVar
 from pyDatePicker import Datepicker
 import sys
@@ -9,6 +9,7 @@ import tkinter.ttk as ttk
 
 username = "ntw"
 timezone = "Europe/Berlin"
+
 
 class TFVacationManager:
 
@@ -29,6 +30,7 @@ class TFVacationManager:
 
         self.root.mainloop()
 
+    @staticmethod
     def get_localtime(self):
         return datetime.now(tz.tzlocal()).date().strftime("%d.%m.%Y")
 
