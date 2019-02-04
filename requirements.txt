@@ -1,2 +1,4 @@
 Jinja2
 python-dateutil
+paramiko
+scp

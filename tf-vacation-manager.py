@@ -8,6 +8,8 @@ from pyDatePicker import Datepicker
 import sys
 import tkinter.ttk as ttk
 
+from src.file_network_manager import upload_vacation_file
+
 logger = logging.getLogger("default")
 logger.setLevel(logging.INFO)
 
@@ -58,6 +60,8 @@ class TFVacationManager:
         path = file_path + '/' + file_name
         with open(path, "w") as file:
             file.write(vacation_file_content)
+
+        upload_vacation_file(file_name, self.username.get())
 
     def set_window(self):
         self.root = Tk()
