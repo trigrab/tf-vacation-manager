@@ -70,7 +70,7 @@ class TFVacationManager:
         with open(path, "w") as file:
             file.write(self.vacation_text.get())
 
-        upload_vacation_file(file_name, self.username.get(), key_filename='/home/lukas/.ssh/id_ed25519')
+        upload_vacation_file(file_name, self.username.get())
 
     def set_window(self):
         self.root = Tk()
