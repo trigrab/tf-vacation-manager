@@ -6,8 +6,8 @@
 We could use:
 https://github.com/paramiko/paramiko
 
-* make server and path configurable
-* decide if old file gets deleted or moved
+* ~~make server and path configurable~~
+* ~~decide if old file gets deleted or moved~~
 
 ## GUI
 

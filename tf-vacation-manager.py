@@ -16,8 +16,6 @@ logger = logging.getLogger("default")
 logger.setLevel(logging.INFO)
 
 
-
-
 class TFVacationManager:
 
     def __init__(self):
@@ -69,7 +67,8 @@ class TFVacationManager:
         with open(path, "w") as file:
             file.write(self.vacation_text.get())
 
-        upload_vacation_file(file_name, self.username.get(), key_filename=key_file)
+        upload_vacation_file(server=server, filename=file_name, user=self.username.get(),
+                             key_filename=key_file)
 
     def set_window(self):
         self.root = Tk()
@@ -116,7 +115,7 @@ class TFVacationManager:
         self.vacation_text_field.config(state='disabled')
 
     def delete_vacation_file(self):
-        delete_vacation_file(filename=file_name, user=self.username.get(), key_filename=key_file)
+        delete_vacation_file(server=server, filename=file_name, user=self.username.get(), key_filename=key_file)
 
 
 if __name__ == '__main__':
