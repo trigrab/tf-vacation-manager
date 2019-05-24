@@ -8,14 +8,14 @@ from pyDatePicker import Datepicker
 import sys
 import tkinter.ttk as ttk
 
-from src.file_network_manager import upload_vacation_file
+from config import *
+
+from src.file_network_manager import upload_vacation_file, delete_vacation_file
 
 logger = logging.getLogger("default")
 logger.setLevel(logging.INFO)
 
-username = "ntw"
-file_path = "./"
-file_name = ".vacation.txt"
+
 
 
 class TFVacationManager:
@@ -54,9 +54,8 @@ class TFVacationManager:
 
     def get_vacation_text(self):
         return self.template.render(start_date=self.start_date.get(),
-                                                     end_date=self.end_date.get(),
-                                                     username=self.username.get())
-
+                                    end_date=self.end_date.get(),
+                                    username=self.username.get())
 
     def write_vacation_file(self):
         self.vacation_text.set(self.get_vacation_text())
@@ -70,7 +69,7 @@ class TFVacationManager:
         with open(path, "w") as file:
             file.write(self.vacation_text.get())
 
-        upload_vacation_file(file_name, self.username.get())
+        upload_vacation_file(file_name, self.username.get(), key_filename=key_file)
 
     def set_window(self):
         self.root = Tk()
