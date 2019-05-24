@@ -3,7 +3,7 @@ from datetime import datetime
 
 from dateutil import tz
 from jinja2 import FileSystemLoader, Environment
-from tkinter import Tk, Frame, Label, StringVar
+from tkinter import Tk, Frame, Label, StringVar, Text, INSERT, END
 from pyDatePicker import Datepicker
 import sys
 import tkinter.ttk as ttk
@@ -33,6 +33,9 @@ class TFVacationManager:
         self.start_date.set(self.get_localtime())
         self.end_date = StringVar()
         self.status = None
+        self.vacation_text = StringVar()
+        self.vacation_text.set(self.get_vacation_text())
+        self.vacation_text_field = None
 
         self.build_window_structure()
 
@@ -49,23 +52,29 @@ class TFVacationManager:
         template_file = "vacation_template.txt"
         return template_env.get_template(template_file)
 
-    def write_vacation_file(self):
-        vacation_file_content = self.template.render(start_date=self.start_date.get(),
+    def get_vacation_text(self):
+        return self.template.render(start_date=self.start_date.get(),
                                                      end_date=self.end_date.get(),
                                                      username=self.username.get())
+
+
+    def write_vacation_file(self):
+        self.vacation_text.set(self.get_vacation_text())
+        self.set_vacation_text_field()
+
         logger.info("VacationFile stored in: %s \n Content:\n%s\n" % (file_path,
-                                                                      vacation_file_content))
+                                                                      self.vacation_text))
 
         self.status.config(text="text file written")
         path = file_path + '/' + file_name
         with open(path, "w") as file:
-            file.write(vacation_file_content)
+            file.write(self.vacation_text.get())
 
-        upload_vacation_file(file_name, self.username.get())
+        upload_vacation_file(file_name, self.username.get(), key_filename='/home/lukas/.ssh/id_ed25519')
 
     def set_window(self):
         self.root = Tk()
-        self.root.geometry("500x600")
+        self.root.geometry("600x600")
         self.root.title = "VacationManager"
 
     def build_window_structure(self):
@@ -89,10 +98,20 @@ class TFVacationManager:
         self.status = Label(main, justify="left", textvariable=self.status)
 
         self.status.pack(anchor="w", pady=(15, 0))
+
+        self.vacation_text_field = Text(main)
+        self.set_vacation_text_field()
+        self.vacation_text_field.pack(anchor="w", pady=(15, 0))
+
         if 'win' not in sys.platform:
             style = ttk.Style()
             style.theme_use('clam')
 
+    def set_vacation_text_field(self):
+        self.vacation_text_field.config(state='normal')
+        self.vacation_text_field.delete('1.0', END)
+        self.vacation_text_field.insert(INSERT, self.vacation_text.get())
+        self.vacation_text_field.config(state='disabled')
 
 if __name__ == '__main__':
     TFVacationManager()
