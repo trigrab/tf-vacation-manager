@@ -1,8 +1,8 @@
-From: {{ username }}@informatik.uni-freiburg.de
+From: {{ username }}@tf.uni-freiburg.de
 Subject: Ich habe Urlaub
 
 Hallo $FROM,
 
 Die EMail bzgl. $SUBJECT ist angekommen, ich bin jedoch von {{ start_date }} bis
-zum {{ end_date }} nicht im Hause und werde Ihre EMail anschliessend bearbeiten.
+zum {{ end_date }} nicht im Büro und werde Ihre E-Mail anschliessend bearbeiten.
 
