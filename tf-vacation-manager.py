@@ -94,6 +94,9 @@ class TFVacationManager:
         ttk.Button(main, text="set", width=10, command=self.write_vacation_file).pack(anchor="w",
                                                                                       pady=(15, 0))
 
+        ttk.Button(main, text="unset", width=10,
+                   command=self.delete_vacation_file).pack(anchor="w", pady=(15, 0))
+
         self.status = Label(main, justify="left", textvariable=self.status)
 
         self.status.pack(anchor="w", pady=(15, 0))
@@ -111,6 +114,10 @@ class TFVacationManager:
         self.vacation_text_field.delete('1.0', END)
         self.vacation_text_field.insert(INSERT, self.vacation_text.get())
         self.vacation_text_field.config(state='disabled')
+
+    def delete_vacation_file(self):
+        delete_vacation_file(filename=file_name, user=self.username.get(), key_filename=key_file)
+
 
 if __name__ == '__main__':
     TFVacationManager()
