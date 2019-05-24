@@ -11,10 +11,10 @@ https://github.com/paramiko/paramiko
 
 ## GUI
 
-* read template from local disk
-* read template from appdata if it exists
-* implement datepicker for date fields
-* add/remove vacation file from server
+* ~~read template from local disk~~
+* ~~read template from appdata if it exists~~
+* ~~implement datepicker for date fields~~
+* ~~add/remove vacation file from server~~
 
 ## Deployment
 
