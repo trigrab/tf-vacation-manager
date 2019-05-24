@@ -3,6 +3,6 @@ Subject: Ich habe Urlaub
 
 Hallo $FROM,
 
-Die EMail bzgl. $SUBJECT ist angekommen, ich bin jedoch von {{ start_date }} bis
+Die E-Mail bzgl. $SUBJECT ist angekommen, ich bin jedoch von {{ start_date }} bis
 zum {{ end_date }} nicht im Büro und werde Ihre E-Mail anschliessend bearbeiten.
 
