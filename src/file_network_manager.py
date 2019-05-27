@@ -16,13 +16,12 @@ class FileNetworkManager():
         self.password_field = StringVar()
         self.main_frame = None
 
-
     def close_password_input_window(self):
+        self.main_frame.destroy()
         self.root.destroy()
         print("Close window")
         self.password = self.password_field.get()
         self.connect_to_server()
-
 
     def create(self):
         if self.root is None:
@@ -39,7 +38,6 @@ class FileNetworkManager():
 
         self.main_frame.wait_window(self.main_frame)
 
-
     def connect_to_server(self):
         self.ssh = SSHClient()
         self.ssh.set_missing_host_key_policy(AutoAddPolicy())
@@ -54,7 +52,6 @@ class FileNetworkManager():
             print("Could not connect to server")
             print(e)
             self.create()
-
 
     def upload_vacation_file(self, filename):
         self.connect_to_server()
