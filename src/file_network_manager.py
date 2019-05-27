@@ -24,8 +24,7 @@ class FileNetworkManager():
         self.connect_to_server()
 
     def create(self):
-        if self.root is None:
-            self.root = Toplevel(self.tk_root)
+        self.root = Toplevel(self.tk_root)
         self.main_frame = Frame(self.root, pady=15, padx=15)
         self.main_frame.pack(expand=True, fill="both")
 
