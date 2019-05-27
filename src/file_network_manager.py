@@ -32,7 +32,7 @@ class FileNetworkManager():
                   textvariable=password_field,
                   width=100).pack(anchor="w")
 
-        ttk.Button(main, text='Connect', command=self.close_password_input_window()).pack(anchor="w", pady=(15, 0))
+        ttk.Button(main, text='Connect', command=self.close_password_input_window).pack(anchor="w", pady=(15, 0))
 
         main.wait_window(main)
 
