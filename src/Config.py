@@ -63,6 +63,8 @@ class Config:
             yml_dict = {}
             for key in self.get_save_member_list(for_saving=True):
                 yml_dict[key] = getattr(self, key)
+                if yml_dict[key] == '':
+                    yml_dict[key] = None
             dump(yml_dict, config_file)
 
     def read(self):
