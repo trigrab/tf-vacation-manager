@@ -21,14 +21,15 @@ class TFVacationManager:
 
     def __init__(self):
         self.config = Config()
-        self.file_network_manager = FileNetworkManager(server=self.config.server, username=self.config.username,
-                                                       key_filename=self.config.key_file)
 
         self.root = None
 
         self.template = self.get_template()
 
         self.set_window()
+
+        self.file_network_manager = FileNetworkManager(server=self.config.server, username=self.config.username, tk_root=self.root,
+                                                       key_filename=self.config.key_file)
 
         self.start_date = StringVar()
         self.start_date.set(self.get_localtime())
@@ -75,7 +76,7 @@ class TFVacationManager:
     def set_window(self):
         self.root = Tk()
         self.root.geometry("600x600")
-        self.root.title = "VacationManager"
+        self.root.title("VacationManager")
 
     def build_window_structure(self):
         main = Frame(self.root, pady=15, padx=15)

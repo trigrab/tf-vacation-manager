@@ -1,43 +1,43 @@
 from paramiko import SSHClient, AutoAddPolicy
 from paramiko.ssh_exception import AuthenticationException, SSHException
 from scp import SCPClient
-from tkinter import Frame, Label, ttk, StringVar, Tk
+from tkinter import Frame, Label, ttk, StringVar, Tk, Toplevel
 
 
 class FileNetworkManager():
 
-    def __init__(self, server, username, key_filename=None, password=None):
+    def __init__(self, server, username, tk_root, key_filename=None, password=None):
+        self.tk_root = tk_root
         self.root = None
         self.server = server
         self.username = username
         self.key_filename = key_filename
         self.password = password
+        self.password_field = StringVar()
+        self.main_frame = None
 
 
     def close_password_input_window(self):
-        self.root.destroy()
+        self.main_frame.destroy()
+        print("Close window")
+        self.password = self.password_field.get()
+        self.connect_to_server()
 
 
     def create(self):
-        self.root = Tk()
-        self.root.geometry("300x450")
-        self.root.title = "VacationManager"
+        if self.root is None:
+            self.root = Toplevel(self.tk_root)
+        self.main_frame = Frame(self.root, pady=15, padx=15)
+        self.main_frame.pack(expand=True, fill="both")
 
-        main = Frame(pady=15, padx=15)
-        main.pack(expand=True, fill="both")
+        Label(self.main_frame, justify="left", text="Password").pack(anchor="w", pady=(15, 0))
+        ttk.Entry(self.main_frame,
+                  textvariable=self.password_field,
+                  width=100, show='*').pack(anchor="w")
 
-        Label(main, justify="left", text="Password").pack(anchor="w", pady=(15, 0))
-        password_field = StringVar()
-        ttk.Entry(main,
-                  textvariable=password_field,
-                  width=100).pack(anchor="w")
+        ttk.Button(self.main_frame, text='Connect', command=self.close_password_input_window).pack(anchor="w", pady=(15, 0))
 
-        ttk.Button(main, text='Connect', command=self.close_password_input_window).pack(anchor="w", pady=(15, 0))
-
-        main.wait_window(main)
-
-        self.password = password_field.get()
-        self.connect_to_server()
+        self.main_frame.wait_window(self.main_frame)
 
 
     def connect_to_server(self):
