@@ -3,7 +3,7 @@ from datetime import datetime
 
 from dateutil import tz
 from jinja2 import FileSystemLoader, Environment
-from tkinter import Tk, Frame, Label, StringVar, Text, INSERT, END
+from tkinter import Tk, Frame, Label, StringVar, Text, INSERT, END, messagebox
 from src.pyDatePicker import Datepicker
 import sys
 import tkinter.ttk as ttk
@@ -80,6 +80,13 @@ class TFVacationManager:
 
         self.file_network_manager.upload_vacation_file(filename=self.config.file_name)
 
+        if self.file_network_manager.check_if_vacation_exists(self.config.file_name):
+            msg = "Vacation successfully created"
+        else:
+            msg = "Oops something went wrong :("
+
+        messagebox.showinfo("Info", msg)
+
     def set_window(self):
         self.root = Tk()
         self.root.geometry("600x600")
@@ -123,6 +130,12 @@ class TFVacationManager:
 
     def delete_vacation_file(self):
         self.file_network_manager.delete_vacation_file(filename=self.config.file_name)
+        if self.file_network_manager.check_if_vacation_exists(self.config.file_name):
+            msg = "Deleting was not successful"
+        else:
+            msg = "Successfully deleted"
+
+        messagebox.showinfo("Info", msg)
 
 
 if __name__ == '__main__':

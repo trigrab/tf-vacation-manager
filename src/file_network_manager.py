@@ -86,3 +86,13 @@ class FileNetworkManager():
         # ssh.set_missing_host_key_policy(AutoAddPolicy())
         self.ssh.exec_command('rm ' + filename)
         return True
+
+    def check_if_vacation_exists(self, filename):
+        self.connect_to_server()
+        _, stdout, error = self.ssh.exec_command('test -f "' + filename + '" && echo "True"')
+        response = stdout.read()
+        # print(response)
+        if response != b'':
+            return True
+        else:
+            return False
