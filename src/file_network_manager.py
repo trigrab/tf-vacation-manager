@@ -5,8 +5,8 @@ from scp import SCPClient
 
 def connect_to_server(server, filename, user, key_filename=None, password=None):
     ssh = SSHClient()
-    # ssh.set_missing_host_key_policy(AutoAddPolicy())
-    ssh.load_system_host_keys()
+    ssh.set_missing_host_key_policy(AutoAddPolicy())
+    #ssh.load_system_host_keys()
     try:
         ssh.connect(server, username=user, key_filename=key_filename, password=password)
     except AuthenticationException as e:
