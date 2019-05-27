@@ -4,13 +4,14 @@ from datetime import datetime
 from dateutil import tz
 from jinja2 import FileSystemLoader, Environment
 from tkinter import Tk, Frame, Label, StringVar, Text, INSERT, END
-from pyDatePicker import Datepicker
+from src.pyDatePicker import Datepicker
 import sys
 import tkinter.ttk as ttk
 
 from src.file_network_manager import FileNetworkManager
 
 from src.Config import Config
+import os.path
 
 
 logger = logging.getLogger("default")
@@ -23,10 +24,9 @@ class TFVacationManager:
         self.config = Config()
 
         self.root = None
+        self.set_window()
 
         self.template = self.get_template()
-
-        self.set_window()
 
         self.file_network_manager = FileNetworkManager(server=self.config.server, username=self.config.username, tk_root=self.root,
                                                        key_filename=self.config.key_file)
@@ -49,9 +49,16 @@ class TFVacationManager:
 
     @staticmethod
     def get_template():
+        template_file = "vacation_message.txt"
+        if not os.path.exists(template_file):
+            script_path = os.path.dirname(os.path.realpath(__file__))
+            with open(os.path.join(script_path, 'vacation_template.txt'), 'r') as default_template:
+                with open(template_file, 'w') as new_template_file:
+                    new_template_file.writelines(default_template.readlines())
+
         template_loader = FileSystemLoader(searchpath="./")
         template_env = Environment(loader=template_loader)
-        template_file = "vacation_template.txt"
+
         return template_env.get_template(template_file)
 
     def get_vacation_text(self):
