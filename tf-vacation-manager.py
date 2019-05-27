@@ -4,7 +4,7 @@ from datetime import datetime
 from dateutil import tz
 from jinja2 import FileSystemLoader, Environment
 from tkinter import Tk, Frame, Label, StringVar, Text, INSERT, END
-from pyDatePicker import Datepicker
+from src.pyDatePicker import Datepicker
 import sys
 import tkinter.ttk as ttk
 
