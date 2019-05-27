@@ -1,4 +1,4 @@
-from tkinter import Frame, Label, ttk, StringVar, Tk
+from tkinter import Frame, Label, ttk, StringVar, Tk, Toplevel
 
 from yaml import load, dump
 import os.path
@@ -16,29 +16,28 @@ class Config:
 
     def __init__(self):
         self.read()
+        self.main = None
+        self.root = None
 
     def create(self):
         self._tkinter_vars['vars'] = {}
 
-        root = Tk()
-        root.geometry("300x450")
-        root.title = "VacationManager"
-
-        main = Frame(pady=15, padx=15)
-        main.pack(expand=True, fill="both")
+        self.root = Tk()
+        self.main = Frame(self.root, pady=15, padx=15)
+        self.main.pack(expand=True, fill="both")
 
         for key in self.get_save_member_list():
             value = getattr(self, key)
-            Label(main, justify="left", text=key).pack(anchor="w", pady=(15, 0))
+            Label(self.main, justify="left", text=key).pack(anchor="w", pady=(15, 0))
             self._tkinter_vars['vars'][key] = StringVar()
             self._tkinter_vars['vars'][key].set(value)
-            ttk.Entry(main,
+            ttk.Entry(self.main,
                       textvariable=self._tkinter_vars['vars'][key],
                       width=100).pack(anchor="w")
 
-        ttk.Button(main, text='Save', command=self.save).pack(anchor="w", pady=(15, 0))
+        ttk.Button(self.main, text='Save', command=self.save).pack(anchor="w", pady=(15, 0))
 
-        main.wait_window(main)
+        self.main.wait_window(self.main)
 
     def get_save_member_list(self, for_saving=False):
         member_list = []
@@ -66,6 +65,9 @@ class Config:
                 if yml_dict[key] == '':
                     yml_dict[key] = None
             dump(yml_dict, config_file)
+
+        self.main.destroy()
+        self.root.destroy()
 
     def read(self):
         if os.path.exists(self.config_file):

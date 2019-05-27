@@ -23,10 +23,9 @@ class TFVacationManager:
         self.config = Config()
 
         self.root = None
+        self.set_window()
 
         self.template = self.get_template()
-
-        self.set_window()
 
         self.file_network_manager = FileNetworkManager(server=self.config.server, username=self.config.username, tk_root=self.root,
                                                        key_filename=self.config.key_file)
