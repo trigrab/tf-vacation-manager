@@ -8,7 +8,7 @@ from pyDatePicker import Datepicker
 import sys
 import tkinter.ttk as ttk
 
-from src.file_network_manager import upload_vacation_file, delete_vacation_file
+from src.file_network_manager import FileNetworkManager
 
 from src.Config import Config
 
@@ -21,14 +21,16 @@ class TFVacationManager:
 
     def __init__(self):
         self.config = Config()
+
         self.root = None
 
         self.template = self.get_template()
 
         self.set_window()
 
-        self.username = StringVar()
-        self.username.set(self.config.username)
+        self.file_network_manager = FileNetworkManager(server=self.config.server, username=self.config.username, tk_root=self.root,
+                                                       key_filename=self.config.key_file)
+
         self.start_date = StringVar()
         self.start_date.set(self.get_localtime())
         self.end_date = StringVar()
@@ -55,7 +57,7 @@ class TFVacationManager:
     def get_vacation_text(self):
         return self.template.render(start_date=self.start_date.get(),
                                     end_date=self.end_date.get(),
-                                    username=self.username.get())
+                                    username=self.config.username)
 
     def write_vacation_file(self):
         self.vacation_text.set(self.get_vacation_text())
@@ -69,20 +71,16 @@ class TFVacationManager:
         with open(path, "w") as file:
             file.write(self.vacation_text.get())
 
-        upload_vacation_file(server=self.config.server, filename=self.config.file_name, user=self.username.get(),
-                             key_filename=self.config.key_file)
+        self.file_network_manager.upload_vacation_file(filename=self.config.file_name)
 
     def set_window(self):
         self.root = Tk()
         self.root.geometry("600x600")
-        self.root.title = "VacationManager"
+        self.root.title("VacationManager")
 
     def build_window_structure(self):
         main = Frame(self.root, pady=15, padx=15)
         main.pack(expand=True, fill="both")
-
-        Label(main, justify="left", text="username").pack(anchor="w", pady=(15, 0))
-        ttk.Entry(main, textvariable=self.username).pack(anchor="w")
 
         Label(main, justify="left", text="Urlaub vom").pack(anchor="w", pady=(15, 0))
 
@@ -117,8 +115,7 @@ class TFVacationManager:
         self.vacation_text_field.config(state='disabled')
 
     def delete_vacation_file(self):
-        delete_vacation_file(server=self.config.server, filename=self.config.file_name,
-                             user=self.username.get(), key_filename=self.config.key_file)
+        self.file_network_manager.delete_vacation_file(filename=self.config.file_name)
 
 
 if __name__ == '__main__':
