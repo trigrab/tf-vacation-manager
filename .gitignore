@@ -106,4 +106,4 @@ venv.bak/
 # pycharm
 .idea
 .vacation.txt
-config.py
+config.yml

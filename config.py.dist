@@ -1,5 +1,0 @@
-username = "someone"
-file_path = "./"
-file_name = ".vacation.txt"
-key_file = 'id_ed25519'
-server = 'login.somewhere.example.org'

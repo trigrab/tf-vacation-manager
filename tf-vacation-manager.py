@@ -8,9 +8,10 @@ from pyDatePicker import Datepicker
 import sys
 import tkinter.ttk as ttk
 
-from config import *
-
 from src.file_network_manager import upload_vacation_file, delete_vacation_file
+
+from src.Config import Config
+
 
 logger = logging.getLogger("default")
 logger.setLevel(logging.INFO)
@@ -19,6 +20,7 @@ logger.setLevel(logging.INFO)
 class TFVacationManager:
 
     def __init__(self):
+        self.config = Config()
         self.root = None
 
         self.template = self.get_template()
@@ -26,7 +28,7 @@ class TFVacationManager:
         self.set_window()
 
         self.username = StringVar()
-        self.username.set(username)
+        self.username.set(self.config.username)
         self.start_date = StringVar()
         self.start_date.set(self.get_localtime())
         self.end_date = StringVar()
@@ -59,16 +61,16 @@ class TFVacationManager:
         self.vacation_text.set(self.get_vacation_text())
         self.set_vacation_text_field()
 
-        logger.info("VacationFile stored in: %s \n Content:\n%s\n" % (file_path,
+        logger.info("VacationFile stored in: %s \n Content:\n%s\n" % (self.config.file_path,
                                                                       self.vacation_text))
 
         self.status.config(text="text file written")
-        path = file_path + '/' + file_name
+        path = self.config.file_path + '/' + self.config.file_name
         with open(path, "w") as file:
             file.write(self.vacation_text.get())
 
-        upload_vacation_file(server=server, filename=file_name, user=self.username.get(),
-                             key_filename=key_file)
+        upload_vacation_file(server=self.config.server, filename=self.config.file_name, user=self.username.get(),
+                             key_filename=self.config.key_file)
 
     def set_window(self):
         self.root = Tk()
@@ -115,7 +117,8 @@ class TFVacationManager:
         self.vacation_text_field.config(state='disabled')
 
     def delete_vacation_file(self):
-        delete_vacation_file(server=server, filename=file_name, user=self.username.get(), key_filename=key_file)
+        delete_vacation_file(server=self.config.server, filename=self.config.file_name,
+                             user=self.username.get(), key_filename=self.config.key_file)
 
 
 if __name__ == '__main__':
