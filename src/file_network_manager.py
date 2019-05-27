@@ -18,7 +18,7 @@ class FileNetworkManager():
 
 
     def close_password_input_window(self):
-        self.main_frame.destroy()
+        self.root.destroy()
         print("Close window")
         self.password = self.password_field.get()
         self.connect_to_server()
