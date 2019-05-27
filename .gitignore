@@ -107,3 +107,4 @@ venv.bak/
 .idea
 .vacation.txt
 config.yml
+vacation_message.txt

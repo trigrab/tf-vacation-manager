@@ -11,6 +11,7 @@ import tkinter.ttk as ttk
 from src.file_network_manager import FileNetworkManager
 
 from src.Config import Config
+import os.path
 
 
 logger = logging.getLogger("default")
@@ -48,9 +49,16 @@ class TFVacationManager:
 
     @staticmethod
     def get_template():
+        template_file = "vacation_message.txt"
+        if not os.path.exists(template_file):
+            script_path = os.path.dirname(os.path.realpath(__file__))
+            with open(os.path.join(script_path, 'vacation_template.txt'), 'r') as default_template:
+                with open(template_file, 'w') as new_template_file:
+                    new_template_file.writelines(default_template.readlines())
+
         template_loader = FileSystemLoader(searchpath="./")
         template_env = Environment(loader=template_loader)
-        template_file = "vacation_template.txt"
+
         return template_env.get_template(template_file)
 
     def get_vacation_text(self):
