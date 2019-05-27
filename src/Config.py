@@ -56,11 +56,8 @@ class Config:
     def save(self):
         for key in self.get_save_member_list():
             value = self._tkinter_vars['vars'][key].get()
-            print(key, value)
             if hasattr(self, key):
                 setattr(self, key, value)
-
-        print(self.server)
 
         with open(self.config_file, 'w') as config_file:
             yml_dict = {}
@@ -76,7 +73,6 @@ class Config:
                 for key, value in config_yml.items():
                     if key == 'version':
                         continue
-                    print(key)
                     if hasattr(self, key):
                         setattr(self, key, value)
 
