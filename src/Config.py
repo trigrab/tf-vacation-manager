@@ -19,10 +19,10 @@ class Config:
         self.main = None
         self.root = None
 
-    def create(self):
+    def create(self, tk_root=None):
         self._tkinter_vars['vars'] = {}
 
-        self.root = Tk()
+        self.root = Tk() if tk_root is None else Toplevel(tk_root)
         self.main = Frame(self.root, pady=15, padx=15)
         self.main.pack(expand=True, fill="both")
 
