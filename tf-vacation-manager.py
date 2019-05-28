@@ -82,10 +82,10 @@ class TFVacationManager:
 
         if self.file_network_manager.check_if_vacation_exists(self.config.file_name):
             msg = "Vacation successfully created"
+            messagebox.showinfo("Info", msg)
         else:
             msg = "Oops something went wrong :("
-
-        messagebox.showinfo("Info", msg)
+            messagebox.showerror("Info", msg)
 
     def set_window(self):
         self.root = Tk()
@@ -132,8 +132,10 @@ class TFVacationManager:
         self.file_network_manager.delete_vacation_file(filename=self.config.file_name)
         if self.file_network_manager.check_if_vacation_exists(self.config.file_name):
             msg = "Deleting was not successful"
+            messagebox.showinfo("Info", msg)
         else:
             msg = "Successfully deleted"
+            messagebox.showerror("Info", msg)
 
         messagebox.showinfo("Info", msg)
 
