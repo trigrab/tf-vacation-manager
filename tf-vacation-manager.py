@@ -3,7 +3,7 @@ from datetime import datetime
 
 from dateutil import tz
 from jinja2 import FileSystemLoader, Environment
-from tkinter import Tk, Frame, Label, StringVar, Text, INSERT, END, messagebox
+from tkinter import Tk, Frame, Label, StringVar, Text, INSERT, END, messagebox, Menu
 from src.pyDatePicker import Datepicker
 import sys
 import tkinter.ttk as ttk
@@ -28,7 +28,9 @@ class TFVacationManager:
 
         self.template = self.get_template()
 
-        self.file_network_manager = FileNetworkManager(server=self.config.server, username=self.config.username, tk_root=self.root,
+        self.file_network_manager = FileNetworkManager(server=self.config.server,
+                                                       username=self.config.username,
+                                                       tk_root=self.root,
                                                        key_filename=self.config.key_file)
 
         self.start_date = StringVar()
@@ -95,6 +97,12 @@ class TFVacationManager:
     def build_window_structure(self):
         main = Frame(self.root, pady=15, padx=15)
         main.pack(expand=True, fill="both")
+        menu = Menu(self.root)
+        self.root.config(menu=menu)
+        filemenu = Menu(menu)
+        menu.add_cascade(label="File", menu=filemenu)
+        filemenu.add_command(label="Preferences",
+                             command=self.open_config)
 
         Label(main, justify="left", text="Urlaub vom").pack(anchor="w", pady=(15, 0))
 
@@ -137,7 +145,8 @@ class TFVacationManager:
             msg = "Successfully deleted"
             messagebox.showerror("Info", msg)
 
-        messagebox.showinfo("Info", msg)
+    def open_config(self):
+        self.config.create(tk_root=self.root)
 
 
 if __name__ == '__main__':
