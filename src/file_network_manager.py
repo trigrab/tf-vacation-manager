@@ -4,7 +4,7 @@ from scp import SCPClient
 from tkinter import Frame, Label, ttk, StringVar, Tk, Toplevel, RIGHT, LEFT
 
 
-class FileNetworkManager():
+class FileNetworkManager:
 
     def __init__(self, server, username, tk_root, key_filename=None, password=None):
         self.tk_root = tk_root
@@ -15,7 +15,6 @@ class FileNetworkManager():
         self.password = password
         self.password_field = StringVar()
         self.main_frame = None
-
 
     def close_password_input_window(self):
         self.main_frame.destroy()
@@ -51,7 +50,7 @@ class FileNetworkManager():
     def connect_to_server(self):
         self.ssh = SSHClient()
         self.ssh.set_missing_host_key_policy(AutoAddPolicy())
-        #ssh.load_system_host_keys()
+        # ssh.load_system_host_keys()
         try:
             self.ssh.connect(self.server, username=self.username, key_filename=self.key_filename, password=self.password)
         except AuthenticationException as e:
