@@ -80,9 +80,9 @@ class TFVacationManager:
         with open(path, "w") as file:
             file.write(self.vacation_text.get())
 
-        self.file_network_manager.upload_vacation_file(filename=self.config.file_name)
+        uploaded = self.file_network_manager.upload_vacation_file(filename=self.config.file_name)
 
-        if self.file_network_manager.check_if_vacation_exists(self.config.file_name):
+        if uploaded and self.file_network_manager.check_if_vacation_exists(self.config.file_name):
             msg = "Vacation successfully created"
             messagebox.showinfo("Info", msg)
         else:

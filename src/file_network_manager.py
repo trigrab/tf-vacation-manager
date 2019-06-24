@@ -1,5 +1,5 @@
 from paramiko import SSHClient, AutoAddPolicy
-from paramiko.ssh_exception import AuthenticationException, SSHException
+from paramiko.ssh_exception import AuthenticationException, SSHException, NoValidConnectionsError
 from scp import SCPClient
 from tkinter import Frame, Label, ttk, StringVar, Tk, Toplevel, RIGHT, LEFT
 
@@ -19,7 +19,6 @@ class FileNetworkManager:
     def close_password_input_window(self):
         self.main_frame.destroy()
         self.root.destroy()
-        print("Close window")
         self.password = self.password_field.get()
         self.connect_to_server()
 
@@ -29,7 +28,14 @@ class FileNetworkManager:
         with open(public_keyfile_name, 'r') as key:
             key = key.readline()
             # print('echo "' + key + '" >> .ssh/authorized_keys')
+            if self.ssh is None:
+                return
             self.ssh.exec_command('echo "' + key + '" >> .ssh/authorized_keys')
+
+    def window_closed(self):
+        self.main_frame.destroy()
+        self.root.destroy()
+        self.ssh = None
 
     def create(self):
         self.root = Toplevel(self.tk_root)
@@ -44,7 +50,7 @@ class FileNetworkManager:
         ttk.Button(self.main_frame, text='Connect', command=self.close_password_input_window).pack(side=LEFT, pady=(15, 0))
         ttk.Button(self.main_frame, text='Connect and upload Key', command=self.close_and_upload_key).pack(side=RIGHT,
                                                                                                    pady=(15, 0))
-
+        self.root.protocol("WM_DELETE_WINDOW", self.window_closed)
         self.main_frame.wait_window(self.main_frame)
 
     def connect_to_server(self):
@@ -65,10 +71,13 @@ class FileNetworkManager:
             print('No keyfile')
             # print(e)
             self.create()
+        except NoValidConnectionsError as e:
+            print("No valid connection")
+            self.create()
+
 
     def upload_vacation_file(self, filename):
         self.connect_to_server()
-
         if self.ssh is None:
             return False
 
@@ -88,6 +97,8 @@ class FileNetworkManager:
 
     def check_if_vacation_exists(self, filename):
         self.connect_to_server()
+        if self.ssh is None:
+            return False
         _, stdout, error = self.ssh.exec_command('test -f "' + filename + '" && echo "True"')
         response = stdout.read()
         # print(response)
