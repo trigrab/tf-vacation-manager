@@ -24,8 +24,10 @@ class FileNetworkManager:
         self.connect_to_server()
 
     def close_and_upload_key(self):
+        public_keyfile_name = self.key_filename
         self.close_password_input_window()
-        public_keyfile_name = self.key_filename + ".pub"
+        self.key_filename = public_keyfile_name
+        public_keyfile_name += ".pub"
         with open(public_keyfile_name, 'r') as key:
             key = key.readline()
             # print('echo "' + key + '" >> .ssh/authorized_keys')
@@ -57,9 +59,11 @@ class FileNetworkManager:
     def connect_to_server(self):
         self.ssh = SSHClient()
         self.ssh.set_missing_host_key_policy(AutoAddPolicy())
+
         # ssh.load_system_host_keys()
         try:
-            self.ssh.connect(self.server, username=self.username, key_filename=self.key_filename, password=self.password)
+            self.ssh.connect(self.server, username=self.username, key_filename=self.key_filename,
+                             password=self.password, look_for_keys=False)
         except AuthenticationException as e:
             print("Could not connect to server")
             # print(e)
