@@ -20,6 +20,7 @@ class FileNetworkManager:
         self.main_frame.destroy()
         self.root.destroy()
         self.password = self.password_field.get()
+        self.key_filename = None
         self.connect_to_server()
 
     def close_and_upload_key(self):
