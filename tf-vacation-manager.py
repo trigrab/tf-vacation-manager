@@ -3,7 +3,10 @@ from datetime import datetime
 
 from dateutil import tz
 from jinja2 import FileSystemLoader, Environment
-from tkinter import Tk, Frame, Label, StringVar, Text, INSERT, END, messagebox, Menu
+from tkinter import Tk, Frame, Label, StringVar, Text, INSERT, END, messagebox, Menu, RIGHT, LEFT, \
+    X
+
+from src.TextEditor import TextEditor
 from src.pyDatePicker import Datepicker
 import sys
 import tkinter.ttk as ttk
@@ -26,12 +29,14 @@ class TFVacationManager:
         self.root = None
         self.set_window()
 
+        self.template_file = "vacation_message.txt"
         self.template = self.get_template()
 
         self.file_network_manager = FileNetworkManager(server=self.config.server,
                                                        username=self.config.username,
                                                        tk_root=self.root,
                                                        key_filename=self.config.key_file)
+        self.text_editor = None
 
         self.start_date = StringVar()
         self.start_date.set(self.get_localtime())
@@ -49,19 +54,17 @@ class TFVacationManager:
     def get_localtime():
         return datetime.now(tz.tzlocal()).date().strftime("%d.%m.%Y")
 
-    @staticmethod
-    def get_template():
-        template_file = "vacation_message.txt"
-        if not os.path.exists(template_file):
+    def get_template(self):
+        if not os.path.exists(self.template_file):
             script_path = os.path.dirname(os.path.realpath(__file__))
             with open(os.path.join(script_path, 'vacation_template.txt'), 'r') as default_template:
-                with open(template_file, 'w') as new_template_file:
+                with open(self.template_file, 'w') as new_template_file:
                     new_template_file.writelines(default_template.readlines())
 
         template_loader = FileSystemLoader(searchpath="./")
         template_env = Environment(loader=template_loader)
 
-        return template_env.get_template(template_file)
+        return template_env.get_template(self.template_file)
 
     def get_vacation_text(self):
         return self.template.render(start_date=self.start_date.get(),
@@ -117,14 +120,16 @@ class TFVacationManager:
 
         ttk.Button(main, text="unset", width=10,
                    command=self.delete_vacation_file).pack(anchor="w", pady=(15, 0))
-
         self.status = Label(main, justify="left", textvariable=self.status)
 
         self.status.pack(anchor="w", pady=(15, 0))
+        ttk.Button(main, text='Edit',
+                   command=self.open_text_editor).pack(anchor="e",
+                                                         pady=(0, 0))
 
         self.vacation_text_field = Text(main)
         self.set_vacation_text_field()
-        self.vacation_text_field.pack(anchor="w", pady=(15, 0))
+        self.vacation_text_field.pack(anchor="s", fill=X, pady=(15, 0))
 
         if 'win' not in sys.platform:
             style = ttk.Style()
@@ -147,6 +152,17 @@ class TFVacationManager:
 
     def open_config(self):
         self.config.create(tk_root=self.root)
+
+    def open_text_editor(self):
+        text_editor = self.text_editor = TextEditor(tk_root=self.root,
+                                                    template_file=self.template_file,
+                                                    template_text=self.get_vacation_text())
+        self.text_editor.create()
+        self.root.wait_window(text_editor.root)
+
+        self.template = self.get_template()
+        self.vacation_text.set(self.get_vacation_text())
+        self.set_vacation_text_field()
 
 
 if __name__ == '__main__':
