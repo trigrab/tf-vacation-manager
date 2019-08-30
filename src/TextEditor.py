@@ -4,13 +4,13 @@ from tkinter.scrolledtext import ScrolledText
 
 
 class TextEditor:
-    def __init__(self, tk_root, template_file, template_text):
+    def __init__(self, tk_root, template_file):
         self.tk_root = tk_root
         self.root = None
         self.main_frame = None
         self.editor_file = template_file
         self.editor_text = StringVar()
-        self.editor_text.set(template_text)
+        self.editor_text.set(self.get_editor_text())
         self.editor_text_field = None
         self._tkinter_vars = {}
 
@@ -36,6 +36,10 @@ class TextEditor:
         self.editor_text_field.tag_config("initial", background="white")
         self.editor_text_field.delete('1.0', END)
         self.editor_text_field.insert(INSERT, self.editor_text.get())
+
+    def get_editor_text(self):
+        with open(self.editor_file, 'r') as editor_file_instance:
+            return editor_file_instance.read()
 
     def close_text_editor_without_save(self):
         self.main_frame.destroy()
