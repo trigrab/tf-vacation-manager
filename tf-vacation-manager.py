@@ -3,8 +3,7 @@ from datetime import datetime
 
 from dateutil import tz
 from jinja2 import FileSystemLoader, Environment
-from tkinter import Tk, Frame, Label, StringVar, Text, INSERT, END, messagebox, Menu, RIGHT, LEFT, \
-    X
+from tkinter import Tk, Frame, Label, StringVar, Text, INSERT, END, messagebox, Menu, X
 
 from src.TextEditor import TextEditor
 from src.pyDatePicker import Datepicker
@@ -40,10 +39,12 @@ class TFVacationManager:
 
         self.start_date = StringVar()
         self.start_date.set(self.get_localtime())
+        self.start_date.trace('w', self.set_vacation_text_field)
         self.end_date = StringVar()
+        self.end_date.trace('w', self.set_vacation_text_field)
+
         self.status = None
         self.vacation_text = StringVar()
-        self.vacation_text.set(self.get_vacation_text())
         self.vacation_text_field = None
 
         self.build_window_structure()
@@ -125,17 +126,19 @@ class TFVacationManager:
         self.status.pack(anchor="w", pady=(15, 0))
         ttk.Button(main, text='Edit',
                    command=self.open_text_editor).pack(anchor="e",
-                                                         pady=(0, 0))
+                                                       pady=(0, 0))
 
         self.vacation_text_field = Text(main)
-        self.set_vacation_text_field()
         self.vacation_text_field.pack(anchor="s", fill=X, pady=(15, 0))
+        self.set_vacation_text_field()
 
         if 'win' not in sys.platform:
             style = ttk.Style()
             style.theme_use('clam')
 
-    def set_vacation_text_field(self):
+    def set_vacation_text_field(self, *args):
+        self.template = self.get_template()
+        self.vacation_text.set(self.get_vacation_text())
         self.vacation_text_field.config(state='normal')
         self.vacation_text_field.delete('1.0', END)
         self.vacation_text_field.insert(INSERT, self.vacation_text.get())
@@ -155,13 +158,10 @@ class TFVacationManager:
 
     def open_text_editor(self):
         text_editor = self.text_editor = TextEditor(tk_root=self.root,
-                                                    template_file=self.template_file,
-                                                    template_text=self.get_vacation_text())
+                                                    template_file=self.template_file)
         self.text_editor.create()
         self.root.wait_window(text_editor.root)
 
-        self.template = self.get_template()
-        self.vacation_text.set(self.get_vacation_text())
         self.set_vacation_text_field()
 
 
