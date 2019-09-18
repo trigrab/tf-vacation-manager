@@ -5,14 +5,14 @@ from dateutil import tz
 from jinja2 import FileSystemLoader, Environment
 from tkinter import Tk, Frame, Label, StringVar, Text, INSERT, END, messagebox, Menu, X
 
-from src.TextEditor import TextEditor
-from src.pyDatePicker import Datepicker
+from tf_vacation_manager.src.TextEditor import TextEditor
+from tf_vacation_manager.src.pyDatePicker import Datepicker
 import sys
 import tkinter.ttk as ttk
 
-from src.file_network_manager import FileNetworkManager
+from tf_vacation_manager.src.file_network_manager import FileNetworkManager
 
-from src.Config import Config
+from tf_vacation_manager.src.Config import Config
 import os.path
 
 

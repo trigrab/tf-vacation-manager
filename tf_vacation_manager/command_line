@@ -1,0 +1,4 @@
+#!/usr/bin/env python3
+
+import tf_vacation_manager.TFVacationManager
+tf_vacation_manager.TFVacationManager.TFVacationManager()
