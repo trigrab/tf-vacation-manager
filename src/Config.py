@@ -13,6 +13,7 @@ class Config:
     version = 1.0
     key_file = '/home/someone/.ssh/id_rsa'
     _tkinter_vars = {}
+    file_encoding = 'utf-8'
 
     def __init__(self):
         self.read()

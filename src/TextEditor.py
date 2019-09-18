@@ -1,11 +1,12 @@
 import os
-from tkinter import Tk, Toplevel, Frame, Label, ttk, RIGHT, LEFT, Text, INSERT, END, StringVar
+from tkinter import Toplevel, Frame, ttk, RIGHT, LEFT, INSERT, END, StringVar
 from tkinter.scrolledtext import ScrolledText
 
 
 class TextEditor:
-    def __init__(self, tk_root, template_file):
+    def __init__(self, tk_root, template_file, config):
         self.tk_root = tk_root
+        self.config = config
         self.root = None
         self.main_frame = None
         self.editor_file = template_file
@@ -38,7 +39,8 @@ class TextEditor:
         self.editor_text_field.insert(INSERT, self.editor_text.get())
 
     def get_editor_text(self):
-        with open(self.editor_file, 'r') as editor_file_instance:
+        with open(self.editor_file,
+                  'r', encoding=self.config.file_encoding) as editor_file_instance:
             return editor_file_instance.read()
 
     def close_text_editor_without_save(self):
@@ -50,5 +52,6 @@ class TextEditor:
         self.close_text_editor_without_save()
 
     def save_file(self):
-        with open(os.path.join(self.editor_file), 'w') as editor_file_instance:
+        with open(os.path.join(self.editor_file),
+                  'w', encoding=self.config.file_encoding) as editor_file_instance:
             editor_file_instance.writelines(self.editor_text_field.get("1.0", END))

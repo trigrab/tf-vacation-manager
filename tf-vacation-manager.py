@@ -58,11 +58,13 @@ class TFVacationManager:
     def get_template(self):
         if not os.path.exists(self.template_file):
             script_path = os.path.dirname(os.path.realpath(__file__))
-            with open(os.path.join(script_path, 'vacation_template.txt'), 'r') as default_template:
-                with open(self.template_file, 'w') as new_template_file:
+            with open(os.path.join(script_path, 'vacation_template.txt'),
+                      'r', encoding=self.config.file_encoding) as default_template:
+                with open(self.template_file,
+                          'wb', encoding=self.config.file_encoding) as new_template_file:
                     new_template_file.writelines(default_template.readlines())
 
-        template_loader = FileSystemLoader(searchpath="./")
+        template_loader = FileSystemLoader(searchpath='./')
         template_env = Environment(loader=template_loader)
 
         return template_env.get_template(self.template_file)
@@ -76,31 +78,31 @@ class TFVacationManager:
         self.vacation_text.set(self.get_vacation_text())
         self.set_vacation_text_field()
 
-        logger.info("VacationFile stored in: %s \n Content:\n%s\n" % (self.config.file_path,
+        logger.info('VacationFile stored in: %s \n Content:\n%s\n' % (self.config.file_path,
                                                                       self.vacation_text))
 
-        self.status.config(text="text file written")
+        self.status.config(text='text file written')
         path = self.config.file_path + '/' + self.config.file_name
-        with open(path, "w") as file:
+        with open(path, 'wb', encoding=self.config.file_encoding) as file:
             file.write(self.vacation_text.get())
 
         uploaded = self.file_network_manager.upload_vacation_file(filename=self.config.file_name)
 
         if uploaded and self.file_network_manager.check_if_vacation_exists(self.config.file_name):
-            msg = "Vacation successfully created"
-            messagebox.showinfo("Info", msg)
+            msg = 'Vacation successfully created'
+            messagebox.showinfo('Info', msg)
         else:
-            msg = "Oops something went wrong :("
-            messagebox.showerror("Info", msg)
+            msg = 'Oops something went wrong :('
+            messagebox.showerror('Info', msg)
 
     def set_window(self):
         self.root = Tk()
-        self.root.geometry("600x600")
-        self.root.title("VacationManager")
+        self.root.geometry('600x600')
+        self.root.title('VacationManager')
 
     def build_window_structure(self):
         main = Frame(self.root, pady=15, padx=15)
-        main.pack(expand=True, fill="both")
+        main.pack(expand=True, fill='both')
         menu = Menu(self.root)
         self.root.config(menu=menu)
         filemenu = Menu(menu)
@@ -158,7 +160,8 @@ class TFVacationManager:
 
     def open_text_editor(self):
         text_editor = self.text_editor = TextEditor(tk_root=self.root,
-                                                    template_file=self.template_file)
+                                                    template_file=self.template_file,
+                                                    config=self.config)
         self.text_editor.create()
         self.root.wait_window(text_editor.root)
 
