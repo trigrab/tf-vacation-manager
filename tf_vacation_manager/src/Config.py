@@ -49,7 +49,7 @@ class Config:
                         key is not None and getattr(self, key) is not None:
                     if key == 'vars' or key == 'config_file':
                         continue
-                    if not for_saving and key == 'version' :
+                    if not for_saving and key == 'version':
                         continue
                     member_list.append(key)
         return member_list
@@ -60,7 +60,7 @@ class Config:
             if hasattr(self, key):
                 setattr(self, key, value)
 
-        with open(self.config_file, 'w') as config_file:
+        with open(self.config_file, 'w', encoding=self.file_encoding) as config_file:
             yml_dict = {}
             for key in self.get_save_member_list(for_saving=True):
                 yml_dict[key] = getattr(self, key)

@@ -61,7 +61,7 @@ class TFVacationManager:
             with open(os.path.join(script_path, 'vacation_template.txt'),
                       'r', encoding=self.config.file_encoding) as default_template:
                 with open(self.template_file,
-                          'wb', encoding=self.config.file_encoding) as new_template_file:
+                          'w', encoding=self.config.file_encoding) as new_template_file:
                     new_template_file.writelines(default_template.readlines())
 
         template_loader = FileSystemLoader(searchpath='./')
