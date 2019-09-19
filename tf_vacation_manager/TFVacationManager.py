@@ -1,4 +1,9 @@
+import json
 import logging
+import subprocess
+from subprocess import PIPE
+from distutils.version import LooseVersion, StrictVersion
+import urllib.request
 from datetime import datetime
 
 from dateutil import tz
@@ -109,7 +114,10 @@ class TFVacationManager:
         menu.add_cascade(label="File", menu=filemenu)
         filemenu.add_command(label="Preferences",
                              command=self.open_config)
-
+        filemenu.add_command(label="Check for updates",
+                             command=self.check_for_update)
+        filemenu.add_command(label="Install update",
+                             command=self.update_module)
         Label(main, justify="left", text="Urlaub vom").pack(anchor="w", pady=(15, 0))
 
         Datepicker(main, datevar=self.start_date).pack(anchor="w", )
@@ -166,6 +174,22 @@ class TFVacationManager:
         self.root.wait_window(text_editor.root)
 
         self.set_vacation_text_field()
+
+    @staticmethod
+    def check_for_update():
+        latest_release = TFVacationManager.get_latest_release_tag()
+        latest_release = latest_release[1:]  # remove leading 'v' character from tag_name
+        return StrictVersion(Config.module_version) <= StrictVersion(latest_release)
+
+    @staticmethod
+    def get_latest_release_tag():
+        with urllib.request.urlopen(Config.github_api_repo + 'releases') as response:
+            releases = json.load(response)
+            return releases[0]['tag_name']
+
+    def update_module(self):
+        subprocess.Popen('pip install git+' + self.config.github_repo + '@'
+                         + self.get_latest_release_tag(), shell=True, stdin=PIPE, stdout=PIPE)
 
 
 if __name__ == '__main__':

@@ -3,6 +3,9 @@ from tkinter import Frame, Label, ttk, StringVar, Tk, Toplevel
 from yaml import load, dump
 import os.path
 
+static_parameters = ['module_version',
+                     'github_url', 'github_api', 'github_api_repo', 'github_repo']
+
 
 class Config:
     config_file = './config.yml'
@@ -14,7 +17,11 @@ class Config:
     key_file = '/home/someone/.ssh/id_rsa'
     _tkinter_vars = {}
     file_encoding = 'utf-8'
-    module_version = 1.0
+    module_version = '1.0'
+    github_api = "https://api.github.com/"
+    github_url = "https://github.com/"
+    github_api_repo = github_api + "repos/trigrab/tf-vacation-manager/"
+    github_repo = github_url + "trigrab/tf-vacation-manager/"
 
     def __init__(self):
         self.read()
@@ -44,6 +51,8 @@ class Config:
     def get_save_member_list(self, for_saving=False):
         member_list = []
         for key in dir(Config):
+            if key in static_parameters:
+                continue
             if hasattr(self, key):
                 if not key.startswith('_') and not callable(getattr(self, key)) and \
                         key is not None and getattr(self, key) is not None:
