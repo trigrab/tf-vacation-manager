@@ -3,7 +3,7 @@ from tkinter import Frame, Label, ttk, StringVar, Tk, Toplevel
 from yaml import load, dump
 import os.path
 
-static_parameters = ['module_version',
+static_parameters = ['module_version', 'file_encoding'
                      'github_url', 'github_api', 'github_api_repo', 'github_repo']
 
 
