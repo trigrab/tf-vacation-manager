@@ -17,7 +17,7 @@ class Config:
     key_file = '/home/someone/.ssh/id_rsa'
     _tkinter_vars = {}
     file_encoding = 'utf-8'
-    module_version = '1.0'
+    module_version = '0.1.4'
     github_api = "https://api.github.com/"
     github_url = "https://github.com/"
     github_api_repo = github_api + "repos/trigrab/tf-vacation-manager/"
