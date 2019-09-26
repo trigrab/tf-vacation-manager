@@ -88,7 +88,7 @@ class TFVacationManager:
 
         self.status.config(text='text file written')
         path = self.config.file_path + '/' + self.config.file_name
-        with open(path, 'wb', encoding=self.config.file_encoding) as file:
+        with open(path, 'w', encoding=self.config.file_encoding) as file:
             file.write(self.vacation_text.get())
 
         uploaded = self.file_network_manager.upload_vacation_file(filename=self.config.file_name)
@@ -188,8 +188,12 @@ class TFVacationManager:
             return releases[0]['tag_name']
 
     def update_module(self):
-        subprocess.Popen('pip install git+' + self.config.github_repo + '@'
-                         + self.get_latest_release_tag(), shell=True, stdin=PIPE, stdout=PIPE)
+        if self.check_for_update():
+            subprocess.Popen('pip install ' + self.config.github_repo + 'archive/'
+                             + self.get_latest_release_tag() + '.zip',
+                             shell=True, stdin=PIPE, stdout=PIPE)
+            exit()
+
 
 
 if __name__ == '__main__':
