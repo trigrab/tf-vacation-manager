@@ -56,7 +56,7 @@ setup(
               'tf_vacation_manager/src'],
     include_package_data=True,
     scripts=['tf_vacation_manager/tf_vacation_manager'],
-    install_requires=['Jinja2', 'python-dateutil', 'paramiko', 'scp', 'pyyaml'],
+    install_requires=['Jinja2', 'python-dateutil', 'paramiko', 'scp', 'pyyaml', 'cryptography'],
     zip_safe=True,
     project_urls={
         'Source': 'https://github.com/trigrab/tf-vacation-manager',

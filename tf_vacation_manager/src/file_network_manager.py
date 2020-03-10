@@ -2,6 +2,8 @@ from paramiko import SSHClient, AutoAddPolicy
 from paramiko.ssh_exception import AuthenticationException, SSHException, NoValidConnectionsError
 from scp import SCPClient
 from tkinter import Frame, Label, ttk, StringVar, Tk, Toplevel, RIGHT, LEFT
+from tf_vacation_manager.src.ssh_key_generator import generate_key
+import os
 
 
 class FileNetworkManager:
@@ -60,6 +62,8 @@ class FileNetworkManager:
         self.ssh = SSHClient()
         self.ssh.set_missing_host_key_policy(AutoAddPolicy())
         print("Load key file:", self.key_filename)
+        if not os.path.isfile(self.key_filename):
+            generate_keyfile(self.key_filename)
         # ssh.load_system_host_keys()
         try:
             self.ssh.connect(self.server, username=self.username, key_filename=self.key_filename,
