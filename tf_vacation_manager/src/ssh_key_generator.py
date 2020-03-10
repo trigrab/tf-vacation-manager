@@ -17,11 +17,11 @@ def generate_key(key_path):
         format=crypto_serialization.PrivateFormat.TraditionalOpenSSL,
         encryption_algorithm=crypto_serialization.NoEncryption())
 
-    path = re.split(r"\\ |/", key_path)
+    key_path_parts = re.split(r"\\ |/", key_path)
     print('path:', path)
-    path = '\\'.join(path[:-1])
-    if not path.exists(path):
-        os.makedirs(path)
+    key_path_parts = '\\'.join(key_path_parts[:-1])
+    if not path.exists(key_path_parts):
+        os.makedirs(key_path_parts)
 
     with open(key_path, "w") as text_file:
         text_file.write(private_key.decode("utf-8"))
