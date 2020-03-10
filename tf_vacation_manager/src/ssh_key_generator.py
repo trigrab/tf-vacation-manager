@@ -29,7 +29,7 @@ def generate_key(key_path):
 
 
     with open(key_path + '.pub', "w") as text_file:
-        public_file.write(public_key.decode("utf-8"))
+        text_file.write(public_key.decode("utf-8"))
 
 
     print('Finished write')
