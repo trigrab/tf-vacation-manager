@@ -26,26 +26,21 @@ class FileNetworkManager:
         self.connect_to_server()
 
     def close_and_upload_key(self):
-        print("uploasd keys")
         public_keyfile_name = self.key_filename
         self.close_password_input_window()
-        print('closed')
         self.ssh = SSHClient()
         self.ssh.set_missing_host_key_policy(AutoAddPolicy())
         self.ssh.connect(self.server, username=self.username,
                          password=self.password, look_for_keys=False)
-        print('connected new')
         self.key_filename = public_keyfile_name
         public_keyfile_name += ".pub"
         with open(public_keyfile_name, 'r') as key:
             key = key.readline()
-            print('echo "' + key + '" >> .ssh/authorized_keys')
+            # print('echo "' + key + '" >> .ssh/authorized_keys')
             if self.ssh is None:
-                print('No ssh')
                 return
-            print('upload...')
             self.ssh.exec_command('echo "' + key + '" >> .ssh/authorized_keys')
-            print('uploaded')
+
 
     def window_closed(self):
         self.main_frame.destroy()
@@ -53,7 +48,7 @@ class FileNetworkManager:
         self.ssh = None
 
     def create(self):
-        print('Create...')
+
         self.root = Toplevel(self.tk_root)
         self.main_frame = Frame(self.root, pady=15, padx=15)
         self.main_frame.pack(expand=True, fill="both")
@@ -68,7 +63,7 @@ class FileNetworkManager:
                                                                                                    pady=(15, 0))
         self.root.protocol("WM_DELETE_WINDOW", self.window_closed)
         self.main_frame.wait_window(self.main_frame)
-        print('Created')
+
 
     def connect_to_server(self):
         self.ssh = SSHClient()
@@ -94,7 +89,7 @@ class FileNetworkManager:
             print(e)
             self.create()
         except FileNotFoundError as e:
-            print('No keyfile2')
+            print('No keyfile')
             print(e)
             self.create()
         except NoValidConnectionsError as e:

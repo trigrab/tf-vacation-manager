@@ -5,19 +5,18 @@ from cryptography.hazmat.backends import default_backend as crypto_default_backe
 
 
 def generate_key(key_path):
-    key = rsa.generate_private_key(
-        backend=crypto_default_backend(),
-        public_exponent=65537,
-        key_size=2048
-    )
-    private_key = key.private_bytes(
-        crypto_serialization.Encoding.PEM,
-        crypto_serialization.PrivateFormat.PKCS8,
-        crypto_serialization.NoEncryption())
-    public_key = key.public_key().public_bytes(
-        crypto_serialization.Encoding.OpenSSH,
-        crypto_serialization.PublicFormat.OpenSSH
-    )
+    # generate private/public key pair
+    key = rsa.generate_private_key(backend=default_backend(), public_exponent=65537, \
+        key_size=2048)
+
+    # get public key in OpenSSH format
+    public_key = key.public_key().public_bytes(serialization.Encoding.OpenSSH, \
+        serialization.PublicFormat.OpenSSH)
+
+    # get private key in PEM container format
+    private_key = key.private_bytes(encoding=serialization.Encoding.PEM,
+        format=serialization.PrivateFormat.TraditionalOpenSSL,
+        encryption_algorithm=serialization.NoEncryption())
 
     print(private_key.decode("utf-8"))
     print(public_key.decode("utf-8"))
