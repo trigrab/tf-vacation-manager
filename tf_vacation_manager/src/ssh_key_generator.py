@@ -24,11 +24,11 @@ def generate_key(key_path):
 
     print('write to:', key_path)
 
-    with open(key_pathy, "w") as text_file:
+    with open(key_path, "w") as text_file:
         text_file.write(private_key.decode("utf-8"))
 
 
-    with open(key_pathy + '.pub', "w") as text_file:
+    with open(key_path + '.pub', "w") as text_file:
         public_file.write(public_key.decode("utf-8"))
 
 
