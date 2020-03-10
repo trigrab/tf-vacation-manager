@@ -1,9 +1,7 @@
 from cryptography.hazmat.primitives import serialization as crypto_serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.backends import default_backend as crypto_default_backend
-
-
-
+import re
 
 def generate_key(key_path):
     # generate private/public key pair
@@ -18,6 +16,12 @@ def generate_key(key_path):
     private_key = key.private_bytes(encoding=crypto_serialization.Encoding.PEM,
         format=crypto_serialization.PrivateFormat.TraditionalOpenSSL,
         encryption_algorithm=crypto_serialization.NoEncryption())
+
+    path = re.split(r"\\ |/", key_path)
+    print('path:', path)
+    path = '\\'.join(path[:-1])
+    if not path.exists(path)
+        os.makedirs(path)
 
     with open(key_path, "w") as text_file:
         text_file.write(private_key.decode("utf-8"))
