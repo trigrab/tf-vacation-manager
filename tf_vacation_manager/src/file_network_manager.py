@@ -29,10 +29,12 @@ class FileNetworkManager:
         print("uploasd keys")
         public_keyfile_name = self.key_filename
         self.close_password_input_window()
+        print('closed')
         self.ssh = SSHClient()
         self.ssh.set_missing_host_key_policy(AutoAddPolicy())
         self.ssh.connect(self.server, username=self.username,
                          password=self.password, look_for_keys=False)
+        print('connected new')
         self.key_filename = public_keyfile_name
         public_keyfile_name += ".pub"
         with open(public_keyfile_name, 'r') as key:
