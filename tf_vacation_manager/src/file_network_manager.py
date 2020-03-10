@@ -1,4 +1,4 @@
-from paramiko import SSHClient, AutoAddPolicy
+from paramiko import SSHClient, AutoAddPolicy, RejectPolicy
 from paramiko.ssh_exception import AuthenticationException, SSHException, NoValidConnectionsError
 from scp import SCPClient
 from tkinter import Frame, Label, ttk, StringVar, Tk, Toplevel, RIGHT, LEFT
