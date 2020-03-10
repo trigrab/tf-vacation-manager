@@ -59,7 +59,7 @@ class FileNetworkManager:
     def connect_to_server(self):
         self.ssh = SSHClient()
         self.ssh.set_missing_host_key_policy(AutoAddPolicy())
-
+        print("Load key file:", self.key_filename)
         # ssh.load_system_host_keys()
         try:
             self.ssh.connect(self.server, username=self.username, key_filename=self.key_filename,
@@ -73,7 +73,7 @@ class FileNetworkManager:
             # print(e)
             self.create()
         except FileNotFoundError as e:
-            print('No keyfile')
+            print('No keyfile2')
             # print(e)
             self.create()
         except NoValidConnectionsError as e:
