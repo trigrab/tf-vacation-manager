@@ -2,6 +2,7 @@ from cryptography.hazmat.primitives import serialization as crypto_serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.backends import default_backend as crypto_default_backend
 import re
+import os
 
 def generate_key(key_path):
     # generate private/public key pair
@@ -20,7 +21,7 @@ def generate_key(key_path):
     key_path_parts = re.split(r"\\ |/", key_path)
     print('path:', path)
     key_path_parts = '\\'.join(key_path_parts[:-1])
-    if not path.exists(key_path_parts):
+    if not os.path.exists(key_path_parts):
         os.makedirs(key_path_parts)
 
     with open(key_path, "w") as text_file:
