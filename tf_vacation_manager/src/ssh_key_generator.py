@@ -20,7 +20,7 @@ def generate_key(key_path):
     path = re.split(r"\\ |/", key_path)
     print('path:', path)
     path = '\\'.join(path[:-1])
-    if not path.exists(path)
+    if not path.exists(path):
         os.makedirs(path)
 
     with open(key_path, "w") as text_file:
