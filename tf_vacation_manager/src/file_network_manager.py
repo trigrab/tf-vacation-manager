@@ -66,11 +66,11 @@ class FileNetworkManager:
                              password=self.password, look_for_keys=False)
         except AuthenticationException as e:
             print("Could not connect to server")
-            # print(e)
+            print(e)
             self.create()
         except SSHException as e:
             print("Could not connect to server")
-            # print(e)
+            print(e)
             self.create()
         except FileNotFoundError as e:
             print('No keyfile2')
