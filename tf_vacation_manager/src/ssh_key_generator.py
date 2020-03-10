@@ -11,13 +11,13 @@ def generate_key(key_path):
         key_size=2048)
 
     # get public key in OpenSSH format
-    public_key = key.public_key().public_bytes(serialization.Encoding.OpenSSH, \
-        serialization.PublicFormat.OpenSSH)
+    public_key = key.public_key().public_bytes(crypto_serialization.Encoding.OpenSSH, \
+        crypto_serialization.PublicFormat.OpenSSH)
 
     # get private key in PEM container format
-    private_key = key.private_bytes(encoding=serialization.Encoding.PEM,
-        format=serialization.PrivateFormat.TraditionalOpenSSL,
-        encryption_algorithm=serialization.NoEncryption())
+    private_key = key.private_bytes(encoding=crypto_serialization.Encoding.PEM,
+        format=crypto_serialization.PrivateFormat.TraditionalOpenSSL,
+        encryption_algorithm=crypto_serialization.NoEncryption())
 
     print(private_key.decode("utf-8"))
     print(public_key.decode("utf-8"))
