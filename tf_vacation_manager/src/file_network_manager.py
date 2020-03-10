@@ -26,6 +26,7 @@ class FileNetworkManager:
         self.connect_to_server()
 
     def close_and_upload_key(self):
+        print("uploasd keys")
         public_keyfile_name = self.key_filename
         self.close_password_input_window()
         self.key_filename = public_keyfile_name
@@ -36,7 +37,9 @@ class FileNetworkManager:
             if self.ssh is None:
                 print('No ssh')
                 return
+            print('upload...')
             self.ssh.exec_command('echo "' + key + '" >> .ssh/authorized_keys')
+            print('uploaded')
 
     def window_closed(self):
         self.main_frame.destroy()
