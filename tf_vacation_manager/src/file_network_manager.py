@@ -74,7 +74,7 @@ class FileNetworkManager:
             self.create()
         except FileNotFoundError as e:
             print('No keyfile2')
-            # print(e)
+            print(e)
             self.create()
         except NoValidConnectionsError as e:
             print("No valid connection")
