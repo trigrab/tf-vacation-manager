@@ -32,8 +32,9 @@ class FileNetworkManager:
         public_keyfile_name += ".pub"
         with open(public_keyfile_name, 'r') as key:
             key = key.readline()
-            # print('echo "' + key + '" >> .ssh/authorized_keys')
+            print('echo "' + key + '" >> .ssh/authorized_keys')
             if self.ssh is None:
+                print('No ssh')
                 return
             self.ssh.exec_command('echo "' + key + '" >> .ssh/authorized_keys')
 
@@ -43,6 +44,7 @@ class FileNetworkManager:
         self.ssh = None
 
     def create(self):
+        print('Create...')
         self.root = Toplevel(self.tk_root)
         self.main_frame = Frame(self.root, pady=15, padx=15)
         self.main_frame.pack(expand=True, fill="both")
@@ -57,6 +59,7 @@ class FileNetworkManager:
                                                                                                    pady=(15, 0))
         self.root.protocol("WM_DELETE_WINDOW", self.window_closed)
         self.main_frame.wait_window(self.main_frame)
+        print('Created')
 
     def connect_to_server(self):
         self.ssh = SSHClient()
