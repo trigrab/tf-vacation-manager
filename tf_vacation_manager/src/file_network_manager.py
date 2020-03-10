@@ -63,7 +63,7 @@ class FileNetworkManager:
         self.ssh.set_missing_host_key_policy(AutoAddPolicy())
         print("Load key file:", self.key_filename)
         if not os.path.isfile(self.key_filename):
-            generate_keyfile(self.key_filename)
+            generate_key(self.key_filename)
         # ssh.load_system_host_keys()
         try:
             self.ssh.connect(self.server, username=self.username, key_filename=self.key_filename,
