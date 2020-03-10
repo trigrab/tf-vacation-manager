@@ -23,9 +23,9 @@ def generate_key(key_path):
     print(public_key)
 
     private_file = open(key_path, "w")
-    private_file.write(private_key)
+    private_file.write(private_key.decode("utf-8"))
     private_file.close()
 
     public_file = open(key_path + '.pub', "w")
-    public_file.write(public_key)
+    public_file.write(public_key.decode("utf-8"))
     public_file.close()
