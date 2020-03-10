@@ -19,13 +19,17 @@ def generate_key(key_path):
         crypto_serialization.PublicFormat.OpenSSH
     )
 
-    print(private_key)
-    print(public_key)
+    print(private_key.decode("utf-8"))
+    print(public_key.decode("utf-8"))
 
-    private_file = open(key_path, "w")
-    private_file.write(private_key.decode("utf-8"))
-    private_file.close()
+    print('write to:', key_path)
 
-    public_file = open(key_path + '.pub', "w")
-    public_file.write(public_key.decode("utf-8"))
-    public_file.close()
+    with open(key_pathy, "w") as text_file:
+        text_file.write(private_key.decode("utf-8"))
+
+
+    with open(key_pathy + '.pub', "w") as text_file:
+        public_file.write(public_key.decode("utf-8"))
+
+
+    print('Finished write')
