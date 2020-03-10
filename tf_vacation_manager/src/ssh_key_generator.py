@@ -18,7 +18,7 @@ def generate_key(key_path):
         format=crypto_serialization.PrivateFormat.TraditionalOpenSSL,
         encryption_algorithm=crypto_serialization.NoEncryption())
 
-    key_path_parts = re.split(r"\\ |/", key_path)
+    key_path_parts = re.split(r"\\|/", key_path)
     print('path:', key_path_parts)
     key_path_parts = '\\'.join(key_path_parts[:-1])
     print('path:', key_path_parts)
