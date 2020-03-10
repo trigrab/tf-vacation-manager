@@ -19,17 +19,8 @@ def generate_key(key_path):
         format=crypto_serialization.PrivateFormat.TraditionalOpenSSL,
         encryption_algorithm=crypto_serialization.NoEncryption())
 
-    print(private_key.decode("utf-8"))
-    print(public_key.decode("utf-8"))
-
-    print('write to:', key_path)
-
     with open(key_path, "w") as text_file:
         text_file.write(private_key.decode("utf-8"))
 
-
     with open(key_path + '.pub', "w") as text_file:
         text_file.write(public_key.decode("utf-8"))
-
-
-    print('Finished write')
