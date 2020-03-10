@@ -67,7 +67,7 @@ class FileNetworkManager:
         # ssh.load_system_host_keys()
         private_key = os.path.expanduser(self.key_filename)
         try:
-            self.ssh.connect(self.server, username=self.username, pkey=private_key,
+            self.ssh.connect(self.server, username=self.username, key_filename=private_key,
                              password=self.password, look_for_keys=False)
         except AuthenticationException as e:
             print("Could not connect to server")
