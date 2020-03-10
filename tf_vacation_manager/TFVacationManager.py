@@ -36,6 +36,8 @@ class TFVacationManager:
         self.template_file = "vacation_message.txt"
         self.template = self.get_template()
 
+        key_filename_path = os.path.expanduser('~/.ssh/id_rsa')
+        print('Generated keyfile path', key_filename_path)
         self.file_network_manager = FileNetworkManager(server=self.config.server,
                                                        username=self.config.username,
                                                        tk_root=self.root,
