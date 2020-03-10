@@ -21,3 +21,11 @@ def generate_key(key_path):
 
     print(private_key)
     print(public_key)
+
+    private_file = open(key_path, "w")
+    private_file.write(private_key)
+    private_file.close()
+
+    public_file = open(key_path + '.pub', "w")
+    public_file.write(public_key)
+    public_file.close()
