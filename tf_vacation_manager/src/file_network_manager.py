@@ -29,6 +29,10 @@ class FileNetworkManager:
         print("uploasd keys")
         public_keyfile_name = self.key_filename
         self.close_password_input_window()
+        self.ssh = SSHClient()
+        self.ssh.set_missing_host_key_policy(AutoAddPolicy())
+        self.ssh.connect(self.server, username=self.username,
+                         password=self.password, look_for_keys=False)
         self.key_filename = public_keyfile_name
         public_keyfile_name += ".pub"
         with open(public_keyfile_name, 'r') as key:
@@ -66,7 +70,7 @@ class FileNetworkManager:
 
     def connect_to_server(self):
         self.ssh = SSHClient()
-        self.ssh.set_missing_host_key_policy(RejectPolicy())
+        self.ssh.set_missing_host_key_policy(AutoAddPolicy())
         print("Load key file:", self.key_filename)
         if not os.path.isfile(self.key_filename):
             generate_key(self.key_filename)
