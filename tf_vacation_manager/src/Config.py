@@ -4,7 +4,8 @@ from yaml import load, dump
 import os.path
 
 static_parameters = ['module_version', 'file_encoding'
-                     'github_url', 'github_api', 'github_api_repo', 'github_repo']
+                                       'github_url', 'github_api', 'github_api_repo',
+                     'github_repo']
 
 
 class Config:
@@ -25,8 +26,7 @@ class Config:
 
     def __init__(self):
         self.config_file = self.find_config_file()
-        working_directory = os.path.dirname(self.config_file)
-        os.chdir(working_directory)
+        self.working_directory = os.path.dirname(self.config_file)
         self.read()
         self.main = None
         self.root = None
@@ -91,7 +91,6 @@ class Config:
         self.main.destroy()
         self.root.destroy()
 
-
     def find_config_file(self):
         if os.path.exists(self.config_file):
             return self.config_file
@@ -105,8 +104,6 @@ class Config:
             elif home_dir is None or not os.path.exists(home_dir + '/.tf-vacation-manager'):
                 os.mkdir(os.path.dirname(app_data))
                 return app_data
-
-
         else:
             if home_dir is not None:
                 if not os.path.exists(home_dir + '/.tf-vacation-manager'):
