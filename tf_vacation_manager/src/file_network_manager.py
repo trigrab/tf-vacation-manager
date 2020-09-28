@@ -63,6 +63,7 @@ class FileNetworkManager:
 
     def connect_to_server(self):
         self.ssh = SSHClient()
+
         self.ssh.set_missing_host_key_policy(AutoAddPolicy())
         # print("Load key file:", os.path.abspath(self.key_filename))
         if self.key_filename is not None and not os.path.isfile(self.key_filename):

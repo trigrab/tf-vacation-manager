@@ -33,7 +33,7 @@ class TFVacationManager:
         self.root = None
         self.set_window()
 
-        self.template_file = os.path.join("vacation_message.txt")
+        self.template_file = "vacation_message.txt"
         self.template = self.get_template()
 
         self.file_network_manager = FileNetworkManager(server=self.config.server,
@@ -61,11 +61,11 @@ class TFVacationManager:
         return datetime.now(tz.tzlocal()).date().strftime("%d.%m.%Y")
 
     def get_template(self):
-        if not os.path.exists(self.template_file):
+        if not os.path.exists(os.path.join(self.config.working_directory, self.template_file)):
             script_path = os.path.dirname(os.path.realpath(__file__))
             with open(os.path.join(script_path, 'vacation_template.txt'),
                       'r', encoding=self.config.file_encoding) as default_template:
-                with open(self.template_file,
+                with open(os.path.join(self.config.working_directory, self.template_file),
                           'w', encoding=self.config.file_encoding) as new_template_file:
                     new_template_file.writelines(default_template.readlines())
 
@@ -94,10 +94,10 @@ class TFVacationManager:
         uploaded = self.file_network_manager.upload_vacation_file(filename=self.config.file_name)
 
         if uploaded and self.file_network_manager.check_if_vacation_exists(self.config.file_name):
-            msg = 'Vacation successfully created'
+            msg = 'Erfolgreich erstellt'
             messagebox.showinfo('Info', msg)
         else:
-            msg = 'Oops something went wrong :('
+            msg = 'Uups etwas lief schief :('
             messagebox.showerror('Info', msg)
 
     def set_window(self):
@@ -112,11 +112,11 @@ class TFVacationManager:
         self.root.config(menu=menu)
         filemenu = Menu(menu)
         menu.add_cascade(label="File", menu=filemenu)
-        filemenu.add_command(label="Preferences",
+        filemenu.add_command(label="Eigenschaften",
                              command=self.open_config)
-        filemenu.add_command(label="Check for updates",
+        filemenu.add_command(label="Suche Updates",
                              command=self.check_for_update)
-        filemenu.add_command(label="Install update",
+        filemenu.add_command(label="Update installieren",
                              command=self.update_module)
         Label(main, justify="left", text="Urlaub vom").pack(anchor="w", pady=(15, 0))
 
@@ -157,11 +157,11 @@ class TFVacationManager:
     def delete_vacation_file(self):
         self.file_network_manager.delete_vacation_file(filename=self.config.file_name)
         if self.file_network_manager.check_if_vacation_exists(self.config.file_name):
-            msg = "Deleting was not successful"
-            messagebox.showinfo("Info", msg)
-        else:
-            msg = "Successfully deleted"
+            msg = 'Uups etwas lief schief :('
             messagebox.showerror("Info", msg)
+        else:
+            msg = "Erfolgreich deaktiviert"
+            messagebox.showinfo("Info", msg)
 
     def open_config(self):
         self.config.create(tk_root=self.root)
@@ -189,8 +189,8 @@ class TFVacationManager:
 
     def update_module(self):
         if self.check_for_update():
-            subprocess.Popen('pip install ' + self.config.github_repo + 'archive/'
-                             + self.get_latest_release_tag() + '.zip',
+            subprocess.Popen('pip install ' + self.config.github_repo + '@'
+                             + self.get_latest_release_tag(),
                              shell=True, stdin=PIPE, stdout=PIPE)
             exit()
 

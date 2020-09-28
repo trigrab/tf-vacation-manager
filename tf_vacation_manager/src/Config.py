@@ -15,7 +15,7 @@ class Config:
     file_path = './'
     file_name = '.vacation.txt'
     version = 1.0
-    key_file = '.ssh/id_rsa'
+    key_file = ''
     _tkinter_vars = {}
     file_encoding = 'utf-8'
     module_version = '0.1.4'
@@ -76,7 +76,7 @@ class Config:
                 setattr(self, key, value)
 
         if self.key_file is None or self.key_file == '':
-            self.key_file = os.path.expanduser(os.path.join('~', '.ssh', 'id_rsa'))
+            self.key_file = os.path.join(os.path.expanduser('~'), '.ssh', 'id_rsa')
 
         print('write config to:', self.config_file)
 
