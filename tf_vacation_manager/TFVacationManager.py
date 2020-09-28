@@ -2,7 +2,7 @@ import json
 import logging
 import subprocess
 from subprocess import PIPE
-from distutils.version import LooseVersion, StrictVersion
+from distutils.version import StrictVersion
 import urllib.request
 from datetime import datetime
 
@@ -126,15 +126,15 @@ class TFVacationManager:
 
         Datepicker(main, datevar=self.end_date).pack(anchor="w")
 
-        ttk.Button(main, text="set", width=10, command=self.write_vacation_file).pack(anchor="w",
+        ttk.Button(main, text="Jetzt aktivieren", width=10, command=self.write_vacation_file).pack(anchor="w",
                                                                                       pady=(15, 0))
 
-        ttk.Button(main, text="unset", width=10,
+        ttk.Button(main, text="Jetzt deaktivieren", width=10,
                    command=self.delete_vacation_file).pack(anchor="w", pady=(15, 0))
         self.status = Label(main, justify="left", textvariable=self.status)
 
         self.status.pack(anchor="w", pady=(15, 0))
-        ttk.Button(main, text='Edit',
+        ttk.Button(main, text='Editieren',
                    command=self.open_text_editor).pack(anchor="e",
                                                        pady=(0, 0))
 
@@ -193,7 +193,6 @@ class TFVacationManager:
                              + self.get_latest_release_tag() + '.zip',
                              shell=True, stdin=PIPE, stdout=PIPE)
             exit()
-
 
 
 if __name__ == '__main__':
