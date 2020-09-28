@@ -76,7 +76,7 @@ class Config:
                 setattr(self, key, value)
 
         if self.key_file is None or self.key_file == '':
-            self.key_file = os.path.expanduser('~/.ssh/id_rsa')
+            self.key_file = os.path.expanduser(os.path.join('~', '.ssh', 'id_rsa'))
 
         print('write config to:', self.config_file)
 
@@ -98,17 +98,18 @@ class Config:
         app_data = os.getenv('APPDATA')
         home_dir = os.path.expanduser('~')
         if app_data is not None and os.path.exists(app_data):
-            app_data += '/.tf-vacation-manager/config.yml'
+            #app_data += '/.tf-vacation-manager/config.yml'
+            app_data = os.path.join(app_data, '.tf-vacation-manager', 'config.yml')
             if os.path.exists(app_data):
                 return app_data
-            elif home_dir is None or not os.path.exists(home_dir + '/.tf-vacation-manager'):
+            elif home_dir is None or not os.path.exists(os.path.join(home_dir, '.tf-vacation-manager')):
                 os.mkdir(os.path.dirname(app_data))
                 return app_data
         else:
             if home_dir is not None:
-                if not os.path.exists(home_dir + '/.tf-vacation-manager'):
-                    os.mkdir(home_dir + '/.tf-vacation-manager')
-                return home_dir + '/.tf-vacation-manager/config.yml'
+                if not os.path.exists(os.path.join(home_dir, '.tf-vacation-manager')):
+                    os.mkdir(os.path.join(home_dir, '.tf-vacation-manager'))
+                return os.path.join(home_dir, '.tf-vacation-manager', 'config.yml')
 
         return self.config_file
 

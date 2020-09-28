@@ -4,20 +4,23 @@ from cryptography.hazmat.backends import default_backend as crypto_default_backe
 import re
 import os
 
+
 def generate_key(key_path):
     # generate private/public key pair
     key = rsa.generate_private_key(backend=crypto_default_backend(), public_exponent=65537, key_size=2048)
 
     # get public key in OpenSSH format
-    public_key = key.public_key().public_bytes(crypto_serialization.Encoding.OpenSSH, crypto_serialization.PublicFormat.OpenSSH)
+    public_key = key.public_key().public_bytes(crypto_serialization.Encoding.OpenSSH,
+                                               crypto_serialization.PublicFormat.OpenSSH)
 
     # get private key in PEM container format
     private_key = key.private_bytes(encoding=crypto_serialization.Encoding.PEM,
-        format=crypto_serialization.PrivateFormat.TraditionalOpenSSL,
-        encryption_algorithm=crypto_serialization.NoEncryption())
+                                    format=crypto_serialization.PrivateFormat.TraditionalOpenSSL,
+                                    encryption_algorithm=crypto_serialization.NoEncryption())
 
-    key_path_parts = re.split(r"\\|/", key_path)
-    key_path_parts = '/'.join(key_path_parts[:-1])
+    key_path_parts = ""
+    for part in re.split(r"\\|/", key_path)[:-1]:
+        key_path_parts = os.path.join(key_path_parts, part)
     if not os.path.exists(key_path_parts):
         os.makedirs(key_path_parts)
 
