@@ -33,7 +33,7 @@ class TFVacationManager:
         self.root = None
         self.set_window()
 
-        self.template_file = os.path.join(self.config.working_directory, "vacation_message.txt")
+        self.template_file = os.path.join("vacation_message.txt")
         self.template = self.get_template()
 
         self.file_network_manager = FileNetworkManager(server=self.config.server,
@@ -69,7 +69,7 @@ class TFVacationManager:
                           'w', encoding=self.config.file_encoding) as new_template_file:
                     new_template_file.writelines(default_template.readlines())
 
-        template_loader = FileSystemLoader(searchpath='/')
+        template_loader = FileSystemLoader(searchpath=self.config.working_directory)
         template_env = Environment(loader=template_loader)
 
         return template_env.get_template(self.template_file)
