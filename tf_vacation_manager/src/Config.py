@@ -13,12 +13,13 @@ class Config:
     server = 'login.somewhere.some_uni.de'
     username = 'someone'
     file_path = './'
-    file_name = '.vacation.txt'
+
     version = 1.0
     key_file = ''
     _tkinter_vars = {}
     file_encoding = 'utf-8'
-    module_version = '0.1.4'
+    file_name = '.vacation.txt'
+    module_version = '0.1.5'
     github_api = "https://api.github.com/"
     github_url = "https://github.com/"
     github_api_repo = github_api + "repos/trigrab/tf-vacation-manager/"
@@ -27,6 +28,7 @@ class Config:
     def __init__(self):
         self.config_file = self.find_config_file()
         self.working_directory = os.path.dirname(self.config_file)
+        self.file_name_path = os.path.join(self.working_directory, self.file_name)
         self.read()
         self.main = None
         self.root = None

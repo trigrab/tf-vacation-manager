@@ -88,7 +88,6 @@ class FileNetworkManager:
             print("No valid connection")
             self.create()
 
-
     def upload_vacation_file(self, filename):
         self.connect_to_server()
         if self.ssh is None:
@@ -106,7 +105,8 @@ class FileNetworkManager:
             return False
         # ssh.set_missing_host_key_policy(AutoAddPolicy())
         self.ssh.exec_command('rm ' + filename)
-        return True
+
+        return not self.check_if_vacation_exists(filename)
 
     def check_if_vacation_exists(self, filename):
         self.connect_to_server()
