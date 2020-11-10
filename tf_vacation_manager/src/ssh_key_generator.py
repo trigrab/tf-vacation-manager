@@ -19,11 +19,8 @@ def generate_key(key_path):
                                     format=crypto_serialization.PrivateFormat.TraditionalOpenSSL,
                                     encryption_algorithm=crypto_serialization.NoEncryption())
 
-    key_path_parts = ""
-    for part in re.split(r"\\|/", key_path)[:-1]:
-        key_path_parts = os.path.join(key_path_parts, part)
-    if not os.path.exists(key_path_parts):
-        os.makedirs(key_path_parts)
+    if not os.path.exists(os.path.dirname(key_path)):
+        os.makedirs(os.path.dirname(key_path))
 
     with open(key_path, "w") as text_file:
         text_file.write(private_key.decode("utf-8"))
