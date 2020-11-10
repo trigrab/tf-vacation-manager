@@ -2,7 +2,7 @@ import json
 import logging
 import subprocess
 from subprocess import PIPE
-from distutils.version import LooseVersion, StrictVersion
+from distutils.version import StrictVersion
 import urllib.request
 from datetime import datetime
 
@@ -61,15 +61,15 @@ class TFVacationManager:
         return datetime.now(tz.tzlocal()).date().strftime("%d.%m.%Y")
 
     def get_template(self):
-        if not os.path.exists(self.template_file):
+        if not os.path.exists(os.path.join(self.config.working_directory, self.template_file)):
             script_path = os.path.dirname(os.path.realpath(__file__))
             with open(os.path.join(script_path, 'vacation_template.txt'),
                       'r', encoding=self.config.file_encoding) as default_template:
-                with open(self.template_file,
+                with open(os.path.join(self.config.working_directory, self.template_file),
                           'w', encoding=self.config.file_encoding) as new_template_file:
                     new_template_file.writelines(default_template.readlines())
 
-        template_loader = FileSystemLoader(searchpath='./')
+        template_loader = FileSystemLoader(searchpath=self.config.working_directory)
         template_env = Environment(loader=template_loader)
 
         return template_env.get_template(self.template_file)
@@ -87,17 +87,18 @@ class TFVacationManager:
                                                                       self.vacation_text))
 
         self.status.config(text='text file written')
-        path = self.config.file_path + '/' + self.config.file_name
-        with open(path, 'w', encoding=self.config.file_encoding) as file:
+        with open(self.config.file_name_path, 'w', encoding=self.config.file_encoding) as file:
             file.write(self.vacation_text.get())
 
-        uploaded = self.file_network_manager.upload_vacation_file(filename=self.config.file_name)
+        print(self.config.file_name_path)
+
+        uploaded = self.file_network_manager.upload_vacation_file(filename=self.config.file_name_path)
 
         if uploaded and self.file_network_manager.check_if_vacation_exists(self.config.file_name):
-            msg = 'Vacation successfully created'
+            msg = 'Erfolgreich erstellt'
             messagebox.showinfo('Info', msg)
         else:
-            msg = 'Oops something went wrong :('
+            msg = 'Uups etwas lief schief :('
             messagebox.showerror('Info', msg)
 
     def set_window(self):
@@ -112,11 +113,11 @@ class TFVacationManager:
         self.root.config(menu=menu)
         filemenu = Menu(menu)
         menu.add_cascade(label="File", menu=filemenu)
-        filemenu.add_command(label="Preferences",
+        filemenu.add_command(label="Eigenschaften",
                              command=self.open_config)
-        filemenu.add_command(label="Check for updates",
+        filemenu.add_command(label="Suche Updates",
                              command=self.check_for_update)
-        filemenu.add_command(label="Install update",
+        filemenu.add_command(label="Update installieren",
                              command=self.update_module)
         Label(main, justify="left", text="Urlaub vom").pack(anchor="w", pady=(15, 0))
 
@@ -126,15 +127,15 @@ class TFVacationManager:
 
         Datepicker(main, datevar=self.end_date).pack(anchor="w")
 
-        ttk.Button(main, text="set", width=10, command=self.write_vacation_file).pack(anchor="w",
+        ttk.Button(main, text="Jetzt aktivieren", width=15, command=self.write_vacation_file).pack(anchor="w",
                                                                                       pady=(15, 0))
 
-        ttk.Button(main, text="unset", width=10,
+        ttk.Button(main, text="Jetzt deaktivieren", width=15,
                    command=self.delete_vacation_file).pack(anchor="w", pady=(15, 0))
         self.status = Label(main, justify="left", textvariable=self.status)
 
         self.status.pack(anchor="w", pady=(15, 0))
-        ttk.Button(main, text='Edit',
+        ttk.Button(main, text='Editieren',
                    command=self.open_text_editor).pack(anchor="e",
                                                        pady=(0, 0))
 
@@ -155,12 +156,11 @@ class TFVacationManager:
         self.vacation_text_field.config(state='disabled')
 
     def delete_vacation_file(self):
-        self.file_network_manager.delete_vacation_file(filename=self.config.file_name)
-        if self.file_network_manager.check_if_vacation_exists(self.config.file_name):
-            msg = "Deleting was not successful"
+        if self.file_network_manager.delete_vacation_file(filename=self.config.file_name):
+            msg = "Erfolgreich deaktiviert"
             messagebox.showinfo("Info", msg)
         else:
-            msg = "Successfully deleted"
+            msg = 'Uups etwas lief schief :('
             messagebox.showerror("Info", msg)
 
     def open_config(self):
@@ -168,7 +168,8 @@ class TFVacationManager:
 
     def open_text_editor(self):
         text_editor = self.text_editor = TextEditor(tk_root=self.root,
-                                                    template_file=self.template_file,
+                                                    template_file=os.path.join(self.config.working_directory,
+                                                                               self.template_file),
                                                     config=self.config)
         self.text_editor.create()
         self.root.wait_window(text_editor.root)
@@ -189,11 +190,10 @@ class TFVacationManager:
 
     def update_module(self):
         if self.check_for_update():
-            subprocess.Popen('pip install ' + self.config.github_repo + 'archive/'
-                             + self.get_latest_release_tag() + '.zip',
+            subprocess.Popen('pip install ' + self.config.github_repo + '@'
+                             + self.get_latest_release_tag(),
                              shell=True, stdin=PIPE, stdout=PIPE)
             exit()
-
 
 
 if __name__ == '__main__':

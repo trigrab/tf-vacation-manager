@@ -4,7 +4,8 @@ from yaml import load, dump
 import os.path
 
 static_parameters = ['module_version', 'file_encoding'
-                     'github_url', 'github_api', 'github_api_repo', 'github_repo']
+                                       'github_url', 'github_api', 'github_api_repo',
+                     'github_repo']
 
 
 class Config:
@@ -12,12 +13,13 @@ class Config:
     server = 'login.somewhere.some_uni.de'
     username = 'someone'
     file_path = './'
-    file_name = '.vacation.txt'
+
     version = 1.0
-    key_file = '.ssh/id_rsa'
+    key_file = ''
     _tkinter_vars = {}
     file_encoding = 'utf-8'
-    module_version = '0.1.4'
+    file_name = '.vacation.txt'
+    module_version = '0.1.5'
     github_api = "https://api.github.com/"
     github_url = "https://github.com/"
     github_api_repo = github_api + "repos/trigrab/tf-vacation-manager/"
@@ -25,8 +27,8 @@ class Config:
 
     def __init__(self):
         self.config_file = self.find_config_file()
-        working_directory = os.path.dirname(self.config_file)
-        os.chdir(working_directory)
+        self.working_directory = os.path.dirname(self.config_file)
+        self.file_name_path = os.path.join(self.working_directory, self.file_name)
         self.read()
         self.main = None
         self.root = None
@@ -76,7 +78,7 @@ class Config:
                 setattr(self, key, value)
 
         if self.key_file is None or self.key_file == '':
-            self.key_file = os.path.expanduser('~/.ssh/id_rsa')
+            self.key_file = os.path.join(os.path.expanduser('~'), '.ssh', 'id_rsa')
 
         print('write config to:', self.config_file)
 
@@ -91,7 +93,6 @@ class Config:
         self.main.destroy()
         self.root.destroy()
 
-
     def find_config_file(self):
         if os.path.exists(self.config_file):
             return self.config_file
@@ -99,19 +100,18 @@ class Config:
         app_data = os.getenv('APPDATA')
         home_dir = os.path.expanduser('~')
         if app_data is not None and os.path.exists(app_data):
-            app_data += '/.tf-vacation-manager/config.yml'
+            #app_data += '/.tf-vacation-manager/config.yml'
+            app_data = os.path.join(app_data, '.tf-vacation-manager', 'config.yml')
             if os.path.exists(app_data):
                 return app_data
-            elif home_dir is None or not os.path.exists(home_dir + '/.tf-vacation-manager'):
+            elif home_dir is None or not os.path.exists(os.path.join(home_dir, '.tf-vacation-manager')):
                 os.mkdir(os.path.dirname(app_data))
                 return app_data
-
-
         else:
             if home_dir is not None:
-                if not os.path.exists(home_dir + '/.tf-vacation-manager'):
-                    os.mkdir(home_dir + '/.tf-vacation-manager')
-                return home_dir + '/.tf-vacation-manager/config.yml'
+                if not os.path.exists(os.path.join(home_dir, '.tf-vacation-manager')):
+                    os.mkdir(os.path.join(home_dir, '.tf-vacation-manager'))
+                return os.path.join(home_dir, '.tf-vacation-manager', 'config.yml')
 
         return self.config_file
 
