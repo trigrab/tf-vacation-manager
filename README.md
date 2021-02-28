@@ -1,8 +1,25 @@
 # tf vacation manager
 
-## install
+Tool which creates an out of office notice and sends it via scp to the mail server.
 
-1. install dependencies
-2. copy `config.py.dist` to `config.py` and change it to fit your needs.
-3. modify `vacation_template.txt` to fit your needs
-4. start `tf-vacation-manager.py` with python3
+## Install
+`pip install -U -I https://github.com/trigrab/tf-vacation-manager/archive/master.zip`
+
+## Launch
+### Windows
+Use Windows Run (Win+R) and execute `tf_vacation_manager.exe`.
+
+### Linux
+Open shell and execute `tf_vacation_manager`
+
+## First Start
+Initialy the tool creates all necessary config files. 
+
+### file_path
+Leave this field blank to create a single configuration for each user.
+
+### server
+URL to the where vacation file should be send
+
+### username
+For authentification at server   
