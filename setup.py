@@ -56,6 +56,9 @@ setup(
               'tf_vacation_manager/src'],
     include_package_data=True,
     scripts=['tf_vacation_manager/tf_vacation_manager'],
+    entry_points = {
+		'gui_scripts': ['tf_vacation_manager=tf_vacation_manager.TFVacationManager:TFVacationManager'],
+	},
     install_requires=['Jinja2', 'python-dateutil', 'paramiko', 'scp', 'pyyaml', 'cryptography'],
     zip_safe=True,
     project_urls={
