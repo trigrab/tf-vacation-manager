@@ -17,6 +17,8 @@ Initially the tool creates all necessary config files.
 
 ### file_path
 Leave this field blank to create a single configuration for each user.
+  - Win: `%appdata%\.tf-vacation-manager\`
+  - Linux: `~/.tf-vacation-manager/`
 
 ### server
 URL to the where vacation file should be send
