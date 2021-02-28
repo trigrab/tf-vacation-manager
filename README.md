@@ -13,7 +13,7 @@ Use Windows Run (Win+R) and execute `tf_vacation_manager.exe`.
 Open shell and execute `tf_vacation_manager`
 
 ## First Start
-Initialy the tool creates all necessary config files. 
+Initially the tool creates all necessary config files. 
 
 ### file_path
 Leave this field blank to create a single configuration for each user.
