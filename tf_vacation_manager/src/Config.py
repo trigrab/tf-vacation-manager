@@ -12,7 +12,7 @@ class Config:
     config_file = './config.yml'
     server = 'login.somewhere.some_uni.de'
     username = 'someone'
-    file_path = './'
+    file_path = ''
 
     version = 1.0
     key_file = ''
