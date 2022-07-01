@@ -1,6 +1,6 @@
 from tkinter import Frame, Label, ttk, StringVar, Tk, Toplevel
 
-from yaml import load, dump
+from yaml import load, dump, FullLoader
 import os.path
 
 static_parameters = ['module_version', 'file_encoding'
@@ -19,7 +19,7 @@ class Config:
     _tkinter_vars = {}
     file_encoding = 'utf-8'
     file_name = '.vacation.txt'
-    module_version = '0.1.5'
+    module_version = '0.1.6'
     github_api = "https://api.github.com/"
     github_url = "https://github.com/"
     github_api_repo = github_api + "repos/trigrab/tf-vacation-manager/"
@@ -118,7 +118,7 @@ class Config:
     def read(self):
         if os.path.exists(self.config_file):
             with open(self.config_file, 'r+') as config_file:
-                config_yml = load(config_file)
+                config_yml = load(config_file, Loader=FullLoader)
 
                 for key, value in config_yml.items():
                     if key == 'version':

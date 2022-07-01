@@ -7,7 +7,8 @@ import urllib.request
 from datetime import datetime
 
 from dateutil import tz
-from jinja2 import FileSystemLoader, Environment
+from jinja2 import FileSystemLoader, Environment, BaseLoader
+from jinja2.exceptions import TemplateSyntaxError
 from tkinter import Tk, Frame, Label, StringVar, Text, INSERT, END, messagebox, Menu, X
 
 from tf_vacation_manager.src.TextEditor import TextEditor
@@ -69,10 +70,20 @@ class TFVacationManager:
                           'w', encoding=self.config.file_encoding) as new_template_file:
                     new_template_file.writelines(default_template.readlines())
 
-        template_loader = FileSystemLoader(searchpath=self.config.working_directory)
-        template_env = Environment(loader=template_loader)
+        try:
+            template_loader = FileSystemLoader(searchpath=self.config.working_directory)
+            template_env = Environment(loader=template_loader)
+            template = template_env.get_template(self.template_file)
 
-        return template_env.get_template(self.template_file)
+        except TemplateSyntaxError as e:
+            messagebox.showerror(title="Syntax error", message="There is an error in your message:\n" + e.message +
+                                                               "\nUsing default text.")
+            script_path = os.path.dirname(os.path.realpath(__file__))
+            template_loader = FileSystemLoader(searchpath=script_path)
+            template_env = Environment(loader=template_loader)
+            template = template_env.get_template('vacation_template.txt')
+        return template
+
 
     def get_vacation_text(self):
         return self.template.render(start_date=self.start_date.get(),
